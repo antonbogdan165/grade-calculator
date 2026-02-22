@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <link rel="icon" href="/static/favicon.ico">
+    <link rel="icon" type="image/png" sizes="32x32" href="/static/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/static/favicon-16x16.png">
+    <link rel="apple-touch-icon" href="/static/apple-touch-icon.png">
+    <link rel="manifest" href="/static/site.webmanifest">
+    <link rel="stylesheet" href="/static/css/style.css">
+    <html lang="ru">
+    <meta charset="utf-8">
+    <title>Калькулятор СО, СОР, СОЧ онлайн — расчет итоговой оценки | Казахстан</title>
+    <meta name="description" content="Бесплатный онлайн калькулятор успеваемости. Рассчитайте СО, СОР и СОЧ автоматически. Удобно для учеников Казахстана.">
+    <meta property="og:title" content="Калькулятор успеваемости онлайн">
+    <meta property="og:description" content="Быстрый расчет СО, СОР и СОЧ. Бесплатно и без регистрации.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://antonbog.pythonanywhere.com/">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="canonical" href="https://antonbog.pythonanywhere.com/">
+    <link rel="icon" type="image/x-icon" href="/static/favicon.ico">
+    <meta property="og:site_name" content="Калькулятор СО СОР СОЧ">
+    <meta property="og:image" content="https://antonbog.pythonanywhere.com/static/preview.png">
+    <meta name="theme-color" content="#0f1117">
+    <script type="application/ld+json">
+    {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Калькулятор СО СОР СОЧ",
+    "url": "https://antonbog.pythonanywhere.com/",
+    "applicationCategory": "EducationalApplication",
+    "operatingSystem": "All"
+    }
+    </script>
+</head>
+<body>
+<div class="container">
+    <h1>Калькулятор успеваемости онлайн</h1>
+
+    <div class="grid">
+        <!-- left column -->
+        <div>
+            <!-- СО -->
+            <div class="card">
+                <div class="section-title">СО</div>
+                <div class="row">
+                    <form id="addForm">
+                        <input id="soInput" type="number" placeholder="Введите значение">
+                        <button class="btn" type="submit">Добавить</button>
+                    </form>
+                    <button class="btn ghost" id="clearSoBtn" title="Очистить все СО">Очистить</button>
+                </div>
+                <div class="list" id="soList"></div>
+                <div class="meta">Оценки шкалы 2–10. Можно добавить несколько.</div>
+            </div>
+
+            <!-- СОР -->
+            <div class="card" style="margin-top:16px">
+                <div class="section-title">СОР</div>
+                <div class="row">
+                    <form id="sorForm" style="display:flex; gap:8px; width:100%;">
+                        <input id="sorDialed" type="number" inputmode="numeric" placeholder="Набрал">
+                        <input id="sorMax" type="number" placeholder="Максимум">
+                        <button class="btn" type="submit">Добавить</button>
+                    </form>
+                    <button class="btn ghost" id="clearSorsBtn">Очистить</button>
+                </div>
+                <div class="list" id="sorList"></div>       
+                <div class="meta">Формативные оценки за раздел. Набрал/Максимум.</div>
+            </div>
+
+            <!-- СОЧ -->
+            <div class="card" style="margin-top:16px">
+                <div class="section-title">
+                    СОЧ 
+                    <span class="soch-tooltip">ℹ️
+                        <span class="soch-tooltip-text">
+                            Если значение СОЧ отображается некорректно, обновите страницу
+                        </span>
+                    </span>
+                </div>
+                <div class="row">
+                    <input id="sochDialed" type="number" inputmode="numeric" placeholder="Набрал">
+                    <input id="sochMax" type="number" placeholder="Максимум">
+                    <button class="btn ghost" id="clearSochBtn">Очистить</button>
+                </div>
+                <div class="meta">СОЧ — один итоговый балл (может отсутствовать).</div>
+            </div>
+        </div>
+
+        <!-- right column (results) -->
+        <div>
+            <div class="card">
+                <div class="result-big" id="finalResult">—</div>
+                <div class="subtitle">Автоматический расчёт. Результат обновляется при изменении.</div>
+
+                <a href="https://help.bilimland.kz/l_RUS/knowledge_base/item/354267"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="official-link">
+                📘 Официальная методика расчёта
+                </a>
+
+                <div class="progress-wrap">
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progressFill"></div>
+                    </div>
+
+                    <div class="breakdown" id="breakdown">
+                        <div class="break-card">
+                            <div class="break-title">СО (вклад)</div>
+                            <div class="break-value" id="breakSo">—</div>
+                            <div class="small" id="breakSoDetails"></div>
+                        </div>
+                        <div class="break-card">
+                            <div class="break-title">СОР (вклад)</div>
+                            <div class="break-value" id="breakSors">—</div>
+                            <div class="small" id="breakSorsDetails"></div>
+                        </div>
+
+                        <div class="break-card">
+                            <div class="break-title">СОЧ (вклад)</div>
+                            <div class="break-value" id="breakSoch">—</div>
+                            <div class="small" id="breakSochDetails"></div>
+                        </div>
+                        <div class="break-card">
+                            <div class="break-title">Примечание</div>
+                            <div class="small">СО — 25%, СОР — 25%, СОЧ — 50% (вариант расчёта гибкий).</div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div style="height:12px"></div>
+            <div class="card">
+                <div class="small">Инструмент для быстрого расчёта итоговой успеваемости по системе СО, СОР и СОЧ. Просто вводите оценки — результат считается автоматически.</div>
+                <div style="height:8px"></div>
+            </div>
+        </div>
+    </div>
+    <div class="card" style="margin-top:20px">
+    <h2 style="color:#58a6ff;">О проекте</h2>
+    <p class="small">
+        Онлайн-калькулятор для расчёта итоговой оценки по системе СО, СОР и СОЧ.
+        Результаты обновляются автоматически при добавлении оценок.
+
+        Проект открытый и учебный. Исходный код доступен на GitHub.
+        Разработан на Python и Flask.
+    </p>
+    <p class="small">
+        Проект создан с использованием Python и Flask.
+    </p>
+    </div>
+    <div style="margin-top:25px; text-align:center;" class="small">
+    Разработчик: Anton |
+    <a href="https://github.com/antonbogdan165" target="_blank" style="color:#58a6ff;">
+        GitHub
+    </a>
+    </div>
+</div>
+<script src="/static/js/main.js"></script>
+</body>
+</html>
