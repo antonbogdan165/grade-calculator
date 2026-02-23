@@ -26,6 +26,3 @@ def calculate():
         "total_soch": parts[2],
         "final_result": final_result
     })
-
-if __name__ == "__main__":
-    app.run(debug=True)
