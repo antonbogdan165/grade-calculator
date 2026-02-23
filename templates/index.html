@@ -9,23 +9,22 @@
     <link rel="stylesheet" href="/static/css/style.css">
     <meta charset="utf-8">
     <title>Калькулятор СО, СОР, СОЧ онлайн — расчет итоговой оценки | Казахстан</title>
-    <meta name="description" content="Бесплатный онлайн калькулятор успеваемости. Рассчитайте СО, СОР и СОЧ автоматически. Удобно для учеников Казахстана.">
-    <meta property="og:title" content="Калькулятор успеваемости онлайн">
+    <meta name="description" content="Онлайн калькулятор СО, СОР и СОЧ для школ Казахстана. Быстрый расчёт итоговой оценки за четверть и процента успеваемости. Бесплатно и без регистрации.">    <meta property="og:title" content="Калькулятор успеваемости онлайн">
     <meta property="og:description" content="Быстрый расчет СО, СОР и СОЧ. Бесплатно и без регистрации.">
     <meta property="og:type" content="website">
-    <meta property="og:url" content="https://antonbog.pythonanywhere.com/">
+    <meta property="og:url" content="https://bilimcalc.onrender.com/">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="canonical" href="https://antonbog.pythonanywhere.com/">
+    <link rel="canonical" href="https://bilimcalc.onrender.com/">
     <link rel="icon" type="image/x-icon" href="/static/favicon.ico">
     <meta property="og:site_name" content="Калькулятор СО СОР СОЧ">
-    <meta property="og:image" content="https://antonbog.pythonanywhere.com/static/preview.png">
+    <meta property="og:image" content="https://bilimcalc.onrender.com/static/preview.png">
     <meta name="theme-color" content="#0f1117">
     <script type="application/ld+json">
     {
     "@context": "https://schema.org",
     "@type": "WebSite",
     "name": "Калькулятор СО СОР СОЧ",
-    "url": "https://antonbog.pythonanywhere.com/",
+    "url": "https://bilimcalc.onrender.com/",
     "applicationCategory": "EducationalApplication",
     "operatingSystem": "All"
     }
@@ -64,7 +63,7 @@
                     <button class="btn ghost" id="clearSorsBtn">Очистить</button>
                 </div>
                 <div class="list" id="sorList"></div>       
-                <div class="meta">Формативные оценки за раздел. Набрал/Максимум.</div>
+                <div class="meta">Суммативное оценки за раздел. Набрал/Максимум.</div>
             </div>
 
             <!-- СОЧ -->
@@ -130,23 +129,19 @@
 
             </div>
 
-            <div style="height:12px"></div>
-            <div class="card">
-                <div class="small">Инструмент для быстрого расчёта итоговой успеваемости по системе СО, СОР и СОЧ. Просто вводите оценки — результат считается автоматически.</div>
-                <div style="height:8px"></div>
-            </div>
         </div>
     </div>
     <div class="card" style="margin-top:20px">
     <h2 style="color:#58a6ff;">О проекте</h2>
     <p class="small">
-        Онлайн-калькулятор для расчёта итоговой оценки по системе СО, СОР и СОЧ.
-        Результаты обновляются автоматически при добавлении оценок.
-
-        Проект открытый и учебный. Исходный код доступен на GitHub.
+        Данный онлайн-калькулятор предназначен для быстрого и точного расчёта итоговой
+        оценки по системе СО, СОР и СОЧ в школах Казахстана. Сервис автоматически
+        вычисляет процент успеваемости и помогает ученикам заранее узнать свой итоговый результат.
+        Сервис подходит для учеников 5–11 классов, родителей и учителей.
+        Работает бесплатно, без регистрации и доступен с любого устройства.
     </p>
     <p class="small">
-        Проект создан с использованием Python и Flask.
+        Проект открытый и учебный. Исходный код доступен на GitHub.
     </p>
     </div>
     <div style="margin-top:25px; text-align:center;" class="small">
@@ -155,6 +150,10 @@
         GitHub
     </a>
     </div>
+<footer style="margin-top: 40px; padding: 20px 0; text-align: center; color: #666; font-size: 0.9em; border-top: 1px solid #eee;">
+    <div>© <span id="year">2026</span> BilimCalc. All rights reserved.</div>
+    <div style="margin-top: 5px; opacity: 0.7;">Version 1.0.0</div>
+</footer>
 </div>
 <script src="/static/js/main.js"></script>
 </body>

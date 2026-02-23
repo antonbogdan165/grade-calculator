@@ -129,18 +129,44 @@ document.getElementById("sochMax").addEventListener("input", ()=>{
     saveState(); calculate();
 });
 
+function animatePercentage(element, start, end, duration = 500){
+
+    const startTime = performance.now();
+    const difference = end - start;
+
+    function update(currentTime){
+        const elapsed = currentTime - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+
+        // ease-out
+        const eased = 1 - Math.pow(1 - progress, 3);
+
+        const current = start + difference * eased;
+
+        element.innerText = current.toFixed(2) + "%";
+
+        if(progress < 1){
+            requestAnimationFrame(update);
+        }
+    }
+
+    requestAnimationFrame(update);
+}
+
 /* ---------- calculate via backend ---------- */
 let pending = false;
+
 async function calculate(){
-    // throttle: avoid concurrent requests
     if(pending) return;
     pending = true;
+
     try {
         const sochDialed = Number(document.getElementById("sochDialed").value);
         const sochMax = Number(document.getElementById("sochMax").value);
+
         let soch = null;
         if(Number.isFinite(sochMax) && sochMax > 0){
-            soch = [Number(sochDialed||0), Number(sochMax)];
+            soch = [Number(sochDialed || 0), Number(sochMax)];
         }
 
         const response = await fetch("/calculate", {
@@ -148,9 +174,9 @@ async function calculate(){
             headers: {"Content-Type":"application/json"},
             body: JSON.stringify({ so, sors, soch })
         });
+
         const data = await response.json();
 
-        // update UI breakdown
         const finalEl = document.getElementById("finalResult");
         const fill = document.getElementById("progressFill");
 
@@ -159,30 +185,67 @@ async function calculate(){
         const totalSoch = data.total_soch;
         const final = data.final_result;
 
-        // breakdown values (show — when null)
-        document.getElementById("breakSo").innerText = totalSo !== null ? totalSo.toFixed(2) + "%" : "—";
-        document.getElementById("breakSors").innerText = totalSor !== null ? totalSor.toFixed(2) + "%" : "—";
-        document.getElementById("breakSoch").innerText = totalSoch !== null ? totalSoch.toFixed(2) + "%" : "—";
+        // --- breakdown ---
+        document.getElementById("breakSo").innerText =
+            totalSo !== null ? totalSo.toFixed(2) + "%" : "—";
 
-        document.getElementById("breakSoDetails").innerText = (Array.isArray(so) && so.length>0) ? `(${so.length} оценок)` : "";
-        document.getElementById("breakSorsDetails").innerText = (Array.isArray(sors) && sors.length>0) ? `(${sors.length} СОР)` : "";
-        document.getElementById("breakSochDetails").innerText = (totalSoch !== null) ? `макс ${document.getElementById("sochMax").value || 0}` : "";
+        document.getElementById("breakSors").innerText =
+            totalSor !== null ? totalSor.toFixed(2) + "%" : "—";
+
+        document.getElementById("breakSoch").innerText =
+            totalSoch !== null ? totalSoch.toFixed(2) + "%" : "—";
+
+        document.getElementById("breakSoDetails").innerText =
+            so.length ? `(${so.length} оценок)` : "";
+
+        document.getElementById("breakSorsDetails").innerText =
+            sors.length ? `(${sors.length} СОР)` : "";
+
+        document.getElementById("breakSochDetails").innerText =
+            totalSoch !== null ? `макс ${sochMax || 0}` : "";
+
+        // --- result color logic ---
+        finalEl.classList.remove(
+            "result-danger",
+            "result-warning",
+            "result-good",
+            "result-excellent"
+        );
 
         if(final !== null && final !== undefined){
+
             const pct = Number(final);
-            const pctStr = pct.toFixed(2) + "%";
-            finalEl.innerText = pctStr;
+            const currentText = finalEl.innerText.replace("%","") || "0";
+            const currentValue = parseFloat(currentText) || 0;
+
+            animatePercentage(finalEl, currentValue, pct, 500);
+
             fill.style.width = Math.min(Math.max(pct, 0), 100) + "%";
-            if(pct < 40) fill.style.background = "var(--danger)";
-            else if(pct < 65) fill.style.background = "var(--warning)";
-            else if(pct < 85) fill.style.background = "var(--success)";
-            else fill.style.background = "var(--gread_success)";
+
+            if(pct < 40){
+                finalEl.classList.add("result-danger");
+                fill.style.background = "var(--danger)";
+            }
+            else if(pct < 65){
+                finalEl.classList.add("result-warning");
+                fill.style.background = "var(--warning)";
+            }
+            else if(pct < 85){
+                finalEl.classList.add("result-good");
+                fill.style.background = "var(--success)";
+            }
+            else{
+                finalEl.classList.add("result-excellent");
+                fill.style.background = "var(--gread_success)";
+            }
+
         } else {
             finalEl.innerText = "—";
             fill.style.width = "0%";
         }
 
         saveState();
+
     } catch(e){
         console.error("calculate error", e);
     } finally {
@@ -273,3 +336,5 @@ premiumAutoJump(
     // small delay to let DOM settle then calculate
     setTimeout(()=> calculate(), 120);
 })();
+
+document.getElementById('year').textContent = new Date().getFullYear();
