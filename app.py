@@ -1,10 +1,15 @@
-from flask import Flask, request, jsonify, render_template, send_from_directory
+from flask import Flask, request, jsonify, render_template, send_from_directory, redirect
 
 from logics import calculate_parts, calculate_final
 
 
 app = Flask(__name__)
 
+@app.before_request
+def force_non_www():
+    if request.host.startswith("www."):
+        return redirect("https://bilimcalc.onrender.com" + request.full_path, code=301)
+    
 @app.route('/')
 def index():
     return render_template('index.html')
