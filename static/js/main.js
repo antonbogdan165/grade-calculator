@@ -25,10 +25,11 @@ function renderSO(){
     container.innerHTML = "";
     so.forEach((val, idx) => {
         const item = makeListItem(val, async ()=>{
-            // animate removal
+            const capturedVal = val; // фиксируем значение, а не индекс
             item.classList.add("removing");
             await new Promise(r => setTimeout(r, 260));
-            so.splice(idx,1);
+            const currentIdx = so.lastIndexOf(capturedVal);
+            if(currentIdx !== -1) so.splice(currentIdx, 1);
             saveState();
             renderSO();
             calculate();
@@ -52,9 +53,10 @@ function renderSORS(){
         const [d, m] = pair;
         const text = `${d} / ${m}`;
         const item = makeListItem(text, async ()=>{
+            const capturedIdx = idx; // фиксируем индекс до await
             item.classList.add("removing");
             await new Promise(r => setTimeout(r, 260));
-            sors.splice(idx,1);
+            sors.splice(capturedIdx, 1);
             saveState();
             renderSORS();
             calculate();
@@ -129,12 +131,19 @@ document.getElementById("clearSochBtn").addEventListener("click", ()=>{
     calculate();
 });
 
-/* trigger calculate when soch inputs change */
+/* ---------- debounce ---------- */
+function debounce(fn, ms = 250) {
+    let t;
+    return (...args) => { clearTimeout(t); t = setTimeout(() => fn(...args), ms); };
+}
+const debouncedCalculate = debounce(calculate, 250);
+
+/* SOCH с дебаунсом — не стреляем запрос на каждый символ */
 document.getElementById("sochDialed").addEventListener("input", ()=>{
-    saveState(); calculate();
+    saveState(); debouncedCalculate();
 });
 document.getElementById("sochMax").addEventListener("input", ()=>{
-    saveState(); calculate();
+    saveState(); debouncedCalculate();
 });
 
 function animatePercentage(element, start, end, duration = 500){
@@ -163,10 +172,15 @@ function animatePercentage(element, start, end, duration = 500){
 
 /* ---------- calculate via backend ---------- */
 let pending = false;
+let pendingAgain = false;
 
 async function calculate(){
-    if(pending) return;
+    if(pending) {
+        pendingAgain = true;
+        return;
+    }
     pending = true;
+    pendingAgain = false;
 
     try {
         const sochDialed = Number(document.getElementById("sochDialed").value);
@@ -253,6 +267,7 @@ async function calculate(){
         console.error("calculate error", e);
     } finally {
         pending = false;
+        if(pendingAgain) calculate(); // повторяем пропущенный запрос
     }
 }
 
@@ -290,24 +305,19 @@ sochDialedInput.addEventListener("input", function(){
 
 function premiumAutoJump(fromInput, toInput, maxDigits = 2){
 
-    // Ограничиваем до maxDigits
+    // ИСПРАВЛЕНО: убрали обрезание значения — "100" больше не станет "10"
     fromInput.addEventListener("input", function(e){
 
         // Удаляем всё кроме цифр
         this.value = this.value.replace(/\D/g, "");
 
-        // Обрезаем лишние цифры
-        if(this.value.length > maxDigits){
-            this.value = this.value.slice(0, maxDigits);
-        }
-
-        // Если достигли maxDigits
+        // Только прыгаем на следующее поле, НЕ обрезаем значение
         if(
-            this.value.length === maxDigits &&
-            this.selectionStart === this.value.length // курсор в конце
+            this.value.length >= maxDigits &&
+            this.selectionStart === this.value.length
         ){
             toInput.focus();
-            toInput.select(); // сразу выделяет — удобно перезаписать
+            toInput.select();
         }
     });
 
@@ -337,17 +347,11 @@ premiumAutoJump(
     loadState();
     renderSO();
     renderSORS();
-    // ensure trend visibility reflects saved data
-    if(so.length >= 2){
-        // will open and fetch
-        toggleTrendVisibility(true);
-    } else {
-        toggleTrendVisibility(false);
-    }
-    // small delay to let DOM settle then calculate
+    // небольшая задержка, чтобы DOM успел отрисоваться
     setTimeout(()=> {
         calculate();
-        updateTrend();
+        if(so.length >= 2) updateTrend();
+        else toggleTrendVisibility(false);
     }, 120);
 })();
 

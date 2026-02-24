@@ -1,1 +1,27 @@
-__pycache__
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+
+# Виртуальное окружение
+venv/
+env/
+.venv/
+
+# Переменные окружения (секреты!)
+.env
+.env.local
+.env.production
+
+# ML модели (если большие — лучше хранить отдельно)
+
+# Системные файлы
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp

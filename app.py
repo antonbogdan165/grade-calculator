@@ -1,4 +1,5 @@
 from flask import Flask, request, jsonify, render_template, send_from_directory, redirect
+import os
 
 from logics import calculate_parts, calculate_final
 from ml.analyze import analyze_scores
@@ -6,10 +7,12 @@ from ml.analyze import analyze_scores
 
 app = Flask(__name__)
 
+app.secret_key = os.environ.get("SECRET_KEY", os.urandom(24))
+
 @app.before_request
 def force_non_www():
     if request.host.startswith("www."):
-        return redirect("https://bilimcalc.onrender.com" + request.full_path, code=301)
+        return redirect("https://bilimcalc.vercel.app/" + request.full_path, code=301)
     
 @app.route('/')
 def index():
@@ -22,14 +25,23 @@ def static_from_root():
 
 @app.route('/calculate', methods=['POST'])
 def calculate():
-    data = request.json
-
-    so = data.get("so")
-    sors = data.get("sors")
+    data = request.get_json(silent=True)
+    if not data:
+        return jsonify({"error": "Некорректный JSON"}), 400
+    
+    so = data.get("so", [])
+    sors = data.get("sors", [])
     soch = data.get("soch")
+    
+    if not isinstance(so, list) or not isinstance(sors, list):
+        return jsonify({"error": "Поля 'so' и 'sors' должны быть массивами"}), 400
 
-    parts = calculate_parts(so=so, sors=sors, soch=soch)
-    final_result = calculate_final(*parts)
+    try:
+        parts = calculate_parts(so=so, sors=sors, soch=soch)
+        final_result = calculate_final(*parts)
+    except Exception as e:
+        app.logger.error(f"Ошибка при вычислении: {e}")
+        return jsonify({"error": "Ошибка при вычислении"}), 500
 
     return jsonify({
         "total_so": parts[0],
@@ -40,9 +52,20 @@ def calculate():
     
 @app.route('/trend', methods=['POST'])
 def trend():
-    data = request.json
+    data = request.get_json(silent=True)
+    if not data:
+        return jsonify({"error": "Некорректный JSON"}), 400
+    
     scores = data.get("scores", [])
     
-    result = analyze_scores(scores)
+    if not isinstance(scores, list):
+        return jsonify({"error": "Поле 'scores' должно быть массивом"}), 400
+    
+    try:
+        result = analyze_scores(scores)
+    except Exception as e:
+        app.logger.error(f"Ошибка ML анализа: {e}")
+        return jsonify({"error": "ML анализ недоступен"}), 500
+    
     return jsonify(result)
     

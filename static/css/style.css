@@ -36,13 +36,17 @@ h1{
 }
 .card{
     background: rgba(22, 27, 34, 0.75);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
     padding: 20px;
     border-radius: 16px;
     border: 1px solid rgba(255,255,255,0.05);
     box-shadow: 0 10px 40px rgba(0,0,0,0.4);
     transition: transform .2s ease, box-shadow .2s ease;
+}
+@media (min-width: 600px) and (prefers-reduced-motion: no-preference) {
+    .card {
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+    }
 }
 
 .card:hover{
@@ -91,7 +95,6 @@ input[type="number"]:focus{ border-color: var(--accent) }
 .btn:active{
     transform: scale(.97);
 }
-.btn:hover{ transform: translateY(-2px); box-shadow:0 6px 18px rgba(0,0,0,0.4) }
 .btn.delete{
     background: linear-gradient(180deg,#da3633,#b32b27);
     padding:6px 10px;
