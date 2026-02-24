@@ -354,3 +354,62 @@ background: #1557c0;
     border: 2px solid rgba(255,255,255,0.2);
     box-shadow: 0 0 8px rgba(88,166,255,0.2);
 }
+
+/* ---------- input validation ---------- */
+@keyframes shake {
+    0%   { transform: translateX(0); }
+    20%  { transform: translateX(-6px); }
+    40%  { transform: translateX(6px); }
+    60%  { transform: translateX(-4px); }
+    80%  { transform: translateX(4px); }
+    100% { transform: translateX(0); }
+}
+
+.shake {
+    animation: shake 0.35s ease;
+}
+
+/* Инлайн баннер ошибки */
+.input-error-banner {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 8px;
+    padding: 8px 12px;
+    background: rgba(218, 54, 51, 0.12);
+    border: 1px solid rgba(218, 54, 51, 0.45);
+    border-radius: 10px;
+    color: #ff6b68;
+    font-size: 13px;
+    font-weight: 500;
+    animation: errorSlideIn 0.25s cubic-bezier(.2,.9,.25,1);
+}
+
+.input-error-banner--hide {
+    animation: errorSlideOut 0.25s ease forwards;
+}
+
+.input-error-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 18px;
+    height: 18px;
+    min-width: 18px;
+    background: var(--danger);
+    border-radius: 50%;
+    color: white;
+    font-size: 11px;
+    font-weight: 800;
+    line-height: 1;
+}
+
+@keyframes errorSlideIn {
+    from { opacity: 0; transform: translateY(-6px); max-height: 0; }
+    to   { opacity: 1; transform: translateY(0);    max-height: 60px; }
+}
+
+@keyframes errorSlideOut {
+    from { opacity: 1; transform: translateY(0); }
+    to   { opacity: 0; transform: translateY(-4px); }
+}

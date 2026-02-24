@@ -41,6 +41,7 @@ function renderSO(){
     // show/hide trend depending on number of SO
     if(so.length >= 2){
         toggleTrendVisibility(true);
+        if(typeof Chart !== "undefined") updateTrend();
     } else {
         toggleTrendVisibility(false);
     }
@@ -101,14 +102,28 @@ document.getElementById("sorForm").addEventListener("submit", function(e){
     const d = Number(document.getElementById("sorDialed").value);
     const m = Number(document.getElementById("sorMax").value);
 
-    if(Number.isFinite(m) && m > 0){
-        sors.push([Number(d||0), Number(m)]);
-        document.getElementById("sorDialed").value = "";
-        document.getElementById("sorMax").value = "";
-        saveState();
-        renderSORS();
-        calculate();
+    const sorDialedEl = document.getElementById("sorDialed");
+    const sorMaxEl = document.getElementById("sorMax");
+
+    // Сброс ошибок
+    clearInputError(sorDialedEl);
+    clearInputError(sorMaxEl);
+
+    if(!Number.isFinite(m) || m <= 0) return;
+
+    if(d > m){
+        sorDialedEl.style.borderColor = "var(--danger)";
+        sorMaxEl.style.borderColor = "var(--danger)";
+        showInputError(sorDialedEl, "Максимум не может быть меньше набранного");
+        return;
     }
+
+    sors.push([Number(d||0), Number(m)]);
+    sorDialedEl.value = "";
+    sorMaxEl.value = "";
+    saveState();
+    renderSORS();
+    calculate();
 });
 document.getElementById("clearSoBtn").addEventListener("click", ()=>{
     if(so.length===0) return;
@@ -118,18 +133,76 @@ document.getElementById("clearSoBtn").addEventListener("click", ()=>{
     calculate();
 });
 document.getElementById("clearSorsBtn").addEventListener("click", ()=>{
-    if(sors.length===0) return;
     sors = [];
+    const sorDialedEl = document.getElementById("sorDialed");
+    const sorMaxEl = document.getElementById("sorMax");
+    sorDialedEl.value = "";
+    sorMaxEl.value = "";
+    clearInputError(sorDialedEl);
+    clearInputError(sorMaxEl);
     saveState();
     renderSORS();
     calculate();
 });
 document.getElementById("clearSochBtn").addEventListener("click", ()=>{
-    document.getElementById("sochDialed").value = "";
-    document.getElementById("sochMax").value = "";
+    const dialedEl = document.getElementById("sochDialed");
+    const maxEl = document.getElementById("sochMax");
+    dialedEl.value = "";
+    maxEl.value = "";
+    clearInputError(dialedEl);
+    clearInputError(maxEl);
     saveState();
     calculate();
 });
+
+/* ---------- input error banner ---------- */
+// Каждая "группа" инпутов имеет свой контейнер ошибки
+// inputEl → ключ для поиска banner-контейнера
+const _errorBanners = new Map();
+
+function showInputError(inputEl, message){
+    // Найдём общий родитель (card) для баннера
+    const card = inputEl.closest(".card");
+    if(!card) return;
+
+    const groupId = inputEl.closest("form")?.id || inputEl.closest(".row")?.dataset.group || inputEl.id;
+
+    // Убираем старый баннер этой группы
+    clearInputError(inputEl);
+
+    inputEl.classList.add("shake");
+    inputEl.addEventListener("animationend", () => inputEl.classList.remove("shake"), { once: true });
+
+    // Создаём баннер
+    const banner = document.createElement("div");
+    banner.className = "input-error-banner";
+    banner.innerHTML = `<span class="input-error-icon">!</span><span>${message}</span>`;
+
+    // Вставляем сразу после .row внутри card
+    const row = inputEl.closest(".row") || inputEl.closest("form");
+    if(row && row.parentNode){
+        row.parentNode.insertBefore(banner, row.nextSibling);
+    } else {
+        card.appendChild(banner);
+    }
+
+    _errorBanners.set(groupId, { banner, inputEl });
+
+    const timer = setTimeout(() => clearInputError(inputEl), 3000);
+    banner._timer = timer;
+}
+
+function clearInputError(inputEl){
+    const card = inputEl.closest(".card");
+    if(card){
+        card.querySelectorAll(".input-error-banner").forEach(b => {
+            clearTimeout(b._timer);
+            b.classList.add("input-error-banner--hide");
+            setTimeout(() => b.remove(), 250);
+        });
+    }
+    inputEl.style.borderColor = "";
+}
 
 /* ---------- debounce ---------- */
 function debounce(fn, ms = 250) {
@@ -140,11 +213,33 @@ const debouncedCalculate = debounce(calculate, 250);
 
 /* SOCH с дебаунсом — не стреляем запрос на каждый символ */
 document.getElementById("sochDialed").addEventListener("input", ()=>{
+    validateSoch();
     saveState(); debouncedCalculate();
 });
 document.getElementById("sochMax").addEventListener("input", ()=>{
+    validateSoch();
     saveState(); debouncedCalculate();
 });
+
+function validateSoch(){
+    const dialedEl = document.getElementById("sochDialed");
+    const maxEl = document.getElementById("sochMax");
+    const d = Number(dialedEl.value);
+    const m = Number(maxEl.value);
+
+    // Сброс предыдущих ошибок
+    clearInputError(dialedEl);
+    clearInputError(maxEl);
+
+    if(dialedEl.value === "" || maxEl.value === "") return;
+    if(!Number.isFinite(m) || m <= 0) return;
+
+    if(d > m){
+        dialedEl.style.borderColor = "var(--danger)";
+        maxEl.style.borderColor = "var(--danger)";
+        showInputError(dialedEl, "Максимум не может быть меньше набранного");
+    }
+}
 
 function animatePercentage(element, start, end, duration = 500){
 
@@ -279,9 +374,8 @@ document.getElementById("addForm").addEventListener("submit", function(e){
         so.push(v);
         document.getElementById("soInput").value = "";
         saveState();
-        renderSO();
+        renderSO();   // updateTrend вызывается внутри renderSO
         calculate();
-        updateTrend();
     }
 });
 
@@ -342,6 +436,8 @@ premiumAutoJump(
     2
 );
 
+let trendChart;
+
 /* ---------- init ---------- */
 (function init(){
     loadState();
@@ -356,9 +452,6 @@ premiumAutoJump(
 })();
 
 document.getElementById('year').textContent = new Date().getFullYear();
-
-
-let trendChart;
 
 function toggleTrendVisibility(show){
     const box = document.querySelector(".trend-box");
