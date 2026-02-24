@@ -1,6 +1,7 @@
 from flask import Flask, request, jsonify, render_template, send_from_directory, redirect
 
 from logics import calculate_parts, calculate_final
+from ml.analyze import analyze_scores
 
 
 app = Flask(__name__)
@@ -36,3 +37,12 @@ def calculate():
         "total_soch": parts[2],
         "final_result": final_result
     })
+    
+@app.route('/trend', methods=['POST'])
+def trend():
+    data = request.json
+    scores = data.get("scores", [])
+    
+    result = analyze_scores(scores)
+    return jsonify(result)
+    

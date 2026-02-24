@@ -34,7 +34,7 @@
 </head>
 <body>
 <div class="container">
-    <h1>Калькулятор успеваемости онлайн</h1>
+    <h1>BilimCalc — калькулятор итоговой оценки</h1>
 
     <div class="grid">
         <!-- left column -->
@@ -101,27 +101,34 @@
                     <div class="progress-bar">
                         <div class="progress-fill" id="progressFill"></div>
                     </div>
+                    <div class="trend-box">
+                        <div class="trend-header">
+                            <span>AI анализ</span>
+                            <span id="aiAccuracy">--%</span>
+                        </div>
+
+                        <div id="trendContainer" style="height:250px; width:100%;">
+                            <canvas id="trendChart"></canvas>
+                        </div>
+                        <div class="trend-label" id="trendLabel">—</div>
+                    </div>
 
                     <div class="breakdown" id="breakdown">
                         <div class="break-card">
-                            <div class="break-title">СО (вклад)</div>
+                            <div class="break-title">СО</div>
                             <div class="break-value" id="breakSo">—</div>
                             <div class="small" id="breakSoDetails"></div>
                         </div>
                         <div class="break-card">
-                            <div class="break-title">СОР (вклад)</div>
+                            <div class="break-title">СОР</div>
                             <div class="break-value" id="breakSors">—</div>
                             <div class="small" id="breakSorsDetails"></div>
                         </div>
 
                         <div class="break-card">
-                            <div class="break-title">СОЧ (вклад)</div>
+                            <div class="break-title">СОЧ</div>
                             <div class="break-value" id="breakSoch">—</div>
                             <div class="small" id="breakSochDetails"></div>
-                        </div>
-                        <div class="break-card">
-                            <div class="break-title">Примечание</div>
-                            <div class="small">СО — 25%, СОР — 25%, СОЧ — 50% (вариант расчёта гибкий).</div>
                         </div>
                     </div>
                 </div>
@@ -151,9 +158,11 @@
     </div>
 <footer style="margin-top: 40px; padding: 20px 0; text-align: center; color: #666; font-size: 0.9em; border-top: 1px solid #eee;">
     <div>© <span id="year">2026</span> BilimCalc. All rights reserved.</div>
-    <div style="margin-top: 5px; opacity: 0.7;">Version 1.0.0</div>
+    <div style="margin-top: 5px; opacity: 0.7;">Version 1.1.0</div>
 </footer>
 </div>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="/static/js/main.js"></script>
+
 </body>
 </html>

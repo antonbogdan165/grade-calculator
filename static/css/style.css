@@ -185,19 +185,14 @@ input[type="number"]:focus{ border-color: var(--accent) }
     transition: width .6s cubic-bezier(.2,.9,.25,1);
 }
 .breakdown{
-    display:grid;
-    grid-template-columns: 1fr 1fr;
-    gap:8px;
-    margin-top:12px;
+    display:flex;
+    justify-content:space-between;
+    gap:16px;
 }
 .break-card{
-    background:#0d1117;
-    padding:10px;
-    border-radius:8px;
-    font-size:14px;
-    display:flex;
-    flex-direction:column;
-    gap:6px;
+    background:transparent;
+    padding:0;
+    border:none;
 }
 .break-title{ color: var(--muted); font-size:12px; }
 .break-value{ font-weight:700; font-size:16px; }
@@ -275,4 +270,84 @@ background: #1557c0;
 
 .soch-tooltip:hover .soch-tooltip-text {
     visibility:visible;
+}
+
+
+.trend-box{
+    margin-top:14px;
+    background:#0d1117;
+    border-radius:10px;
+    padding:10px;
+    border:1px solid rgba(255,255,255,0.03);
+    position: relative;
+    overflow: hidden;
+}
+
+.trend-header{
+    display:flex;
+    justify-content:space-between;
+    font-size:13px;
+    margin-bottom:6px;
+    color:#9aa4b2;
+}
+
+.trend-label{
+    text-align:center;
+    font-size:12px;
+    margin-top:4px;
+    color:#58a6ff;
+}
+
+.trend-box::after{
+    content:"";
+    position:absolute;
+    inset:0;
+    background: radial-gradient(circle at 50% -20%, rgba(88,166,255,0.15), transparent 60%);
+    pointer-events:none;
+}
+
+#trendContainer { height: 150px; }
+
+.trend-box {
+    max-height: 420px; 
+    transition: max-height 420ms cubic-bezier(.2,.9,.25,1), 
+                opacity 280ms ease, 
+                padding 280ms ease;
+    opacity: 1;
+    padding: 10px;
+    overflow: hidden;
+}
+
+.trend-box.collapsed {
+    max-height: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.trend-hint {
+    text-align: center;
+    font-size: 13px;
+    color: var(--muted);
+    padding: 8px 6px;
+    display: none;
+}
+.trend-box.collapsed + .trend-hint {
+    display: block;
+}
+
+#trendChart {
+    display: block;
+    height: 100%;
+    width: 100%;
+}
+
+.canvas-shadow {
+    filter: drop-shadow(0 0 15px rgba(88,166,255,0.25));
+}
+
+.chart-point {
+    border: 2px solid rgba(255,255,255,0.2);
+    box-shadow: 0 0 8px rgba(88,166,255,0.2);
 }

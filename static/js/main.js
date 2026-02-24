@@ -32,9 +32,17 @@ function renderSO(){
             saveState();
             renderSO();
             calculate();
+            updateTrend();
         });
         container.appendChild(item);
     });
+
+    // show/hide trend depending on number of SO
+    if(so.length >= 2){
+        toggleTrendVisibility(true);
+    } else {
+        toggleTrendVisibility(false);
+    }
 }
 
 function renderSORS(){
@@ -195,14 +203,9 @@ async function calculate(){
         document.getElementById("breakSoch").innerText =
             totalSoch !== null ? totalSoch.toFixed(2) + "%" : "—";
 
-        document.getElementById("breakSoDetails").innerText =
-            so.length ? `(${so.length} оценок)` : "";
-
-        document.getElementById("breakSorsDetails").innerText =
-            sors.length ? `(${sors.length} СОР)` : "";
-
-        document.getElementById("breakSochDetails").innerText =
-            totalSoch !== null ? `макс ${sochMax || 0}` : "";
+        document.getElementById("breakSoDetails").innerText = "";
+        document.getElementById("breakSorsDetails").innerText = "";
+        document.getElementById("breakSochDetails").innerText = "";
 
         // --- result color logic ---
         finalEl.classList.remove(
@@ -263,6 +266,7 @@ document.getElementById("addForm").addEventListener("submit", function(e){
         saveState();
         renderSO();
         calculate();
+        updateTrend();
     }
 });
 
@@ -333,8 +337,181 @@ premiumAutoJump(
     loadState();
     renderSO();
     renderSORS();
+    // ensure trend visibility reflects saved data
+    if(so.length >= 2){
+        // will open and fetch
+        toggleTrendVisibility(true);
+    } else {
+        toggleTrendVisibility(false);
+    }
     // small delay to let DOM settle then calculate
-    setTimeout(()=> calculate(), 120);
+    setTimeout(()=> {
+        calculate();
+        updateTrend();
+    }, 120);
 })();
 
 document.getElementById('year').textContent = new Date().getFullYear();
+
+
+let trendChart;
+
+function toggleTrendVisibility(show){
+    const box = document.querySelector(".trend-box");
+    if(!box) return;
+
+    if(show){
+        box.classList.remove("collapsed");
+    } else {
+        box.classList.add("collapsed");
+
+        if(trendChart){
+            try{
+                trendChart.destroy();
+            }catch(e){}
+            trendChart = null;
+        }
+
+        const acc = document.getElementById("aiAccuracy");
+        if(acc) acc.textContent = "--%";
+
+        const label = document.getElementById("trendLabel");
+        if(label) label.textContent = "—";
+    }
+}
+
+async function updateTrend(){
+
+    if(so.length < 2){
+        toggleTrendVisibility(false);
+        return;
+    }
+
+    toggleTrendVisibility(true);
+
+    try{
+
+        const response = await fetch("/trend", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                scores: so
+            })
+        });
+
+        const data = await response.json();
+
+        drawTrend(
+            data.scores,
+            data.predictions,
+            data.accuracy
+        );
+
+        if(trendChart && typeof trendChart.resize === "function"){
+            trendChart.resize();
+        }
+
+    }catch(e){
+        console.error("trend error", e);
+    }
+
+}
+
+function drawTrend(scores, predictions, accuracy){
+    const canvas = document.getElementById("trendChart");
+    if (!canvas) return;
+    const ctx = canvas.getContext("2d");
+
+    if (trendChart) trendChart.destroy();
+
+    // --- защита от пустых массивов ---
+    if(!Array.isArray(scores)) scores = [];
+    if(!Array.isArray(predictions)) predictions = [];
+
+    const len = Math.min(scores.length, predictions.length);
+    if(len === 0) return; // нечего рисовать
+
+    scores = scores.slice(0,len).map(v=>Math.min(Math.max(Number(v)||2,2),10));
+    predictions = predictions.slice(0,len).map(v=>Math.min(Math.max(Number(v)||2,2),10));
+
+    const labels = Array.from({length:len}, (_,i)=>i+1);
+
+    const scoreGradient = ctx.createLinearGradient(0,0,0,140);
+    scoreGradient.addColorStop(0,"rgba(88,166,255,0.9)");
+    scoreGradient.addColorStop(1,"rgba(88,166,255,0.05)");
+
+    const predictGradient = ctx.createLinearGradient(0,0,0,140);
+    predictGradient.addColorStop(0,"rgba(46,160,67,0.9)");
+    predictGradient.addColorStop(1,"rgba(46,160,67,0.05)");
+
+    trendChart = new Chart(ctx,{
+        type:"line",
+        data:{
+            labels,
+            datasets:[
+                {
+                    data:scores,
+                    borderColor:"#58a6ff",
+                    backgroundColor:scoreGradient,
+                    borderWidth:3,
+                    tension:0.45,
+                    fill:true,
+                    pointRadius:4,
+                    pointHoverRadius:6
+                },
+                {
+                    data:predictions,
+                    borderColor:"#2ea043",
+                    backgroundColor:predictGradient,
+                    borderWidth:2,
+                    tension:0.45,
+                    fill:true,
+                    pointRadius:0
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            layout: { padding: 6 },
+            animation: {
+                duration: 700,
+                easing: "easeOutQuart"
+            },
+            plugins:{
+                legend:{ display:false },
+                tooltip:{
+                    backgroundColor:"#161b22",
+                    borderColor:"#30363d",
+                    borderWidth:1,
+                    titleColor:"#fff",
+                    bodyColor:"#c9d1d9"
+                }
+            },
+            scales:{
+                x:{
+                    grid:{ color:"rgba(255,255,255,0.04)" },
+                    ticks:{ color:"#8b949e", maxRotation:0, autoSkip:true, maxTicksLimit:5 }
+                },
+                y:{
+                    min:2,
+                    max:10,
+                    grid:{ color:"rgba(255,255,255,0.04)" },
+                    ticks:{ color:"#8b949e", stepSize:2, maxTicksLimit:5 }
+                }
+            },
+            elements: {
+                point: { radius: 3, hoverRadius:5 },
+                line: { tension: 0.36 }
+            }
+        }
+    });
+
+    document.getElementById("aiAccuracy").textContent = accuracy + "%";
+
+    const trend = predictions[predictions.length-1] - predictions[0];
+    let text = "Стабильно";
+    if(trend > 0.3) text = "Тенденция роста (СО) 📈";
+    if(trend < -0.3) text = "Тенденция падения (СО) 📉";
+    document.getElementById("trendLabel").textContent = text;
+}
