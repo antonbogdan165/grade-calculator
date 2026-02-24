@@ -16,7 +16,7 @@
 
 ## 🌐 Live Demo
 
-👉 https://bilimcalc.onrender.com/
+👉 https://bilimcalc.vercel.app
 
 ---
 
