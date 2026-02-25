@@ -8,31 +8,65 @@
     <link rel="manifest" href="/static/site.webmanifest">
     <link rel="stylesheet" href="/static/css/style.css?v=1.2.0">
     <meta charset="utf-8">
-    <title>Калькулятор СО, СОР, СОЧ онлайн — расчет итоговой оценки | Казахстан</title>
+    <title>BilimCalc — калькулятор СО, СОР и СОЧ онлайн</title>
     <meta name="language" content="ru">
     <meta http-equiv="content-language" content="ru">
     <meta property="og:locale" content="ru_RU">
     <meta name="description" content="Онлайн калькулятор СО, СОР и СОЧ для школ Казахстана. Быстрый расчёт итоговой оценки за четверть и процента успеваемости. Бесплатно и без регистрации.">
-    <meta property="og:title" content="Калькулятор успеваемости онлайн">
+    <meta property="og:title" content="BilimCalc — калькулятор СО, СОР и СОЧ онлайн">
     <meta property="og:description" content="Быстрый расчет СО, СОР и СОЧ. Бесплатно и без регистрации.">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://bilimcalc.vercel.app/">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
     <link rel="canonical" href="https://bilimcalc.vercel.app/">
-    <meta property="og:site_name" content="Калькулятор СО СОР СОЧ">
+    <meta property="og:site_name" content="BilimCalc">
     <meta property="og:image" content="https://bilimcalc.vercel.app/static/preview.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content="https://bilimcalc.vercel.app/static/preview.png">
     <meta name="theme-color" content="#0f1117">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <link rel="preconnect" href="https://cdn.jsdelivr.net">
     <script type="application/ld+json">
     {
-        "@context": "https://schema.org",
-        "@type": "WebSite",
-        "name": "Калькулятор СО СОР СОЧ",
-        "url": "https://bilimcalc.vercel.app/",
-        "applicationCategory": "EducationalApplication",
-        "operatingSystem": "All"
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "BilimCalc",
+    "url": "https://bilimcalc.vercel.app/",
+    "logo": "https://bilimcalc.vercel.app/static/icons/favicon-32x32.png"
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "BilimCalc",
+    "alternateName": "Калькулятор СО, СОР и СОЧ",
+    "url": "https://bilimcalc.vercel.app/"
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [{
+        "@type": "Question",
+        "name": "Как рассчитать итоговую оценку за четверть?",
+        "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Введите результаты СО, СОР и СОЧ, калькулятор автоматически рассчитает процент успеваемости."
+        }
+    },
+    {
+        "@type": "Question",
+        "name": "Работает ли калькулятор по системе Казахстана?",
+        "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Да, расчет основан на официальной методике оценивания школ Казахстана."
+        }
+    }]
     }
     </script>
 </head>
@@ -174,6 +208,16 @@
         <div>Разработчик: Anton · <a href="https://github.com/antonbogdan165" target="_blank">GitHub</a></div>
         <div style="margin-top:5px;opacity:.6">© <span id="year"></span> BilimCalc · v1.2.0</div>
     </footer>
+
+    <div class="card" style="margin-top:20px; font-size:14px;">
+    <h2>Часто задаваемые вопросы</h2>
+
+    <h3>Как рассчитать итоговую оценку за четверть?</h3>
+    <p>Введите результаты СО, СОР и СОЧ, калькулятор автоматически рассчитает процент успеваемости.</p>
+
+    <h3>Работает ли калькулятор по системе Казахстана?</h3>
+    <p>Да, расчет основан на официальной методике оценивания школ Казахстана.</p>
+    </div>
 
 </div>
 
