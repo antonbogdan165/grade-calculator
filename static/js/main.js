@@ -25,7 +25,7 @@ function renderSO(){
     container.innerHTML = "";
     so.forEach((val, idx) => {
         const item = makeListItem(val, async ()=>{
-            const capturedVal = val; // фиксируем значение, а не индекс
+            const capturedVal = val;
             item.classList.add("removing");
             await new Promise(r => setTimeout(r, 260));
             const currentIdx = so.lastIndexOf(capturedVal);
@@ -38,7 +38,6 @@ function renderSO(){
         container.appendChild(item);
     });
 
-    // show/hide trend depending on number of SO
     if(so.length >= 2){
         toggleTrendVisibility(true);
         if(typeof Chart !== "undefined") updateTrend();
@@ -54,7 +53,7 @@ function renderSORS(){
         const [d, m] = pair;
         const text = `${d} / ${m}`;
         const item = makeListItem(text, async ()=>{
-            const capturedIdx = idx; // фиксируем индекс до await
+            const capturedIdx = idx;
             item.classList.add("removing");
             await new Promise(r => setTimeout(r, 260));
             sors.splice(capturedIdx, 1);
@@ -75,7 +74,6 @@ function saveState(){
     try {
         localStorage.setItem(LOCAL_KEY, JSON.stringify(payload));
     } catch(e){
-        // storage might be unavailable; ignore
         console.warn("localStorage save failed", e);
     }
 }
@@ -105,7 +103,6 @@ document.getElementById("sorForm").addEventListener("submit", function(e){
     const sorDialedEl = document.getElementById("sorDialed");
     const sorMaxEl = document.getElementById("sorMax");
 
-    // Сброс ошибок
     clearInputError(sorDialedEl);
     clearInputError(sorMaxEl);
 
@@ -114,7 +111,8 @@ document.getElementById("sorForm").addEventListener("submit", function(e){
     if(d > m){
         sorDialedEl.style.borderColor = "var(--danger)";
         sorMaxEl.style.borderColor = "var(--danger)";
-        showInputError(sorDialedEl, "Максимум не может быть меньше набранного");
+        // FIX 3: pass the form element so error banner appears below it
+        showInputError(document.getElementById("sorForm"), "Максимум не может быть меньше набранного");
         return;
     }
 
@@ -156,39 +154,49 @@ document.getElementById("clearSochBtn").addEventListener("click", ()=>{
 });
 
 /* ---------- input error banner ---------- */
-// Каждая "группа" инпутов имеет свой контейнер ошибки
-// inputEl → ключ для поиска banner-контейнера
 const _errorBanners = new Map();
 
-function showInputError(inputEl, message){
-    // Найдём общий родитель (card) для баннера
-    const card = inputEl.closest(".card");
+// FIX 3: anchorEl can now be any element (form, input, etc.) — banner always inserts AFTER it
+function showInputError(anchorEl, message){
+    const card = anchorEl.closest(".card");
     if(!card) return;
 
-    const groupId = inputEl.closest("form")?.id || inputEl.closest(".row")?.dataset.group || inputEl.id;
+    // clear existing banners in this card
+    card.querySelectorAll(".input-error-banner").forEach(b => {
+        clearTimeout(b._timer);
+        b.classList.add("input-error-banner--hide");
+        setTimeout(() => b.remove(), 250);
+    });
 
-    // Убираем старый баннер этой группы
-    clearInputError(inputEl);
+    // shake the anchor element (keep existing behaviour)
+    anchorEl.classList.add("shake");
+    anchorEl.addEventListener("animationend", () => anchorEl.classList.remove("shake"), { once: true });
 
-    inputEl.classList.add("shake");
-    inputEl.addEventListener("animationend", () => inputEl.classList.remove("shake"), { once: true });
-
-    // Создаём баннер
     const banner = document.createElement("div");
     banner.className = "input-error-banner";
     banner.innerHTML = `<span class="input-error-icon">!</span><span>${message}</span>`;
 
-    // Вставляем сразу после .row внутри card
-    const row = inputEl.closest(".row") || inputEl.closest("form");
+    // Найдем ближайшую строку с формой/инпутами (если есть) — иначе вставим в конец карточки.
+    const row = anchorEl.closest(".so-row, .sor-row, .soch-row");
+
+    // Сделаем баннер блочным и растянем по ширине карточки
+    banner.style.width = "100%";
+    banner.style.boxSizing = "border-box";
+
+    // Вставляем баннер _после_ всей строки (row), чтобы он не ломал флекс внутри неё.
     if(row && row.parentNode){
         row.parentNode.insertBefore(banner, row.nextSibling);
+    } else if (anchorEl.parentNode){
+        // fallback: вставляем после элемента
+        anchorEl.parentNode.insertBefore(banner, anchorEl.nextSibling);
     } else {
         card.appendChild(banner);
     }
 
-    _errorBanners.set(groupId, { banner, inputEl });
-
-    const timer = setTimeout(() => clearInputError(inputEl), 3000);
+    const timer = setTimeout(() => {
+        banner.classList.add("input-error-banner--hide");
+        setTimeout(() => banner.remove(), 250);
+    }, 3000);
     banner._timer = timer;
 }
 
@@ -211,7 +219,6 @@ function debounce(fn, ms = 250) {
 }
 const debouncedCalculate = debounce(calculate, 250);
 
-/* SOCH с дебаунсом — не стреляем запрос на каждый символ */
 document.getElementById("sochDialed").addEventListener("input", ()=>{
     validateSoch();
     saveState(); debouncedCalculate();
@@ -221,45 +228,39 @@ document.getElementById("sochMax").addEventListener("input", ()=>{
     saveState(); debouncedCalculate();
 });
 
+// FIX 2: validateSoch now prevents calculation when dialed > max
 function validateSoch(){
     const dialedEl = document.getElementById("sochDialed");
     const maxEl = document.getElementById("sochMax");
     const d = Number(dialedEl.value);
     const m = Number(maxEl.value);
 
-    // Сброс предыдущих ошибок
     clearInputError(dialedEl);
     clearInputError(maxEl);
 
-    if(dialedEl.value === "" || maxEl.value === "") return;
-    if(!Number.isFinite(m) || m <= 0) return;
+    if(dialedEl.value === "" || maxEl.value === "") return true;
+    if(!Number.isFinite(m) || m <= 0) return true;
 
     if(d > m){
         dialedEl.style.borderColor = "var(--danger)";
         maxEl.style.borderColor = "var(--danger)";
         showInputError(dialedEl, "Максимум не может быть меньше набранного");
+        return false; // invalid — caller can skip calculate
     }
+    return true;
 }
 
 function animatePercentage(element, start, end, duration = 500){
-
     const startTime = performance.now();
     const difference = end - start;
 
     function update(currentTime){
         const elapsed = currentTime - startTime;
         const progress = Math.min(elapsed / duration, 1);
-
-        // ease-out
         const eased = 1 - Math.pow(1 - progress, 3);
-
         const current = start + difference * eased;
-
         element.innerText = current.toFixed(2) + "%";
-
-        if(progress < 1){
-            requestAnimationFrame(update);
-        }
+        if(progress < 1) requestAnimationFrame(update);
     }
 
     requestAnimationFrame(update);
@@ -281,8 +282,9 @@ async function calculate(){
         const sochDialed = Number(document.getElementById("sochDialed").value);
         const sochMax = Number(document.getElementById("sochMax").value);
 
+        // FIX 2: skip soch if dialed > max (invalid state)
         let soch = null;
-        if(Number.isFinite(sochMax) && sochMax > 0){
+        if(Number.isFinite(sochMax) && sochMax > 0 && sochDialed <= sochMax){
             soch = [Number(sochDialed || 0), Number(sochMax)];
         }
 
@@ -302,58 +304,62 @@ async function calculate(){
         const totalSoch = data.total_soch;
         const final = data.final_result;
 
-        // --- breakdown ---
         document.getElementById("breakSo").innerText =
             totalSo !== null ? totalSo.toFixed(2) + "%" : "—";
-
         document.getElementById("breakSors").innerText =
             totalSor !== null ? totalSor.toFixed(2) + "%" : "—";
-
         document.getElementById("breakSoch").innerText =
             totalSoch !== null ? totalSoch.toFixed(2) + "%" : "—";
-
         document.getElementById("breakSoDetails").innerText = "";
         document.getElementById("breakSorsDetails").innerText = "";
         document.getElementById("breakSochDetails").innerText = "";
 
-        // --- result color logic ---
-        finalEl.classList.remove(
-            "result-danger",
-            "result-warning",
-            "result-good",
-            "result-excellent"
-        );
+        finalEl.classList.remove("result-danger","result-warning","result-good","result-excellent");
+
+        const badge = document.getElementById("gradeBadge");
 
         if(final !== null && final !== undefined){
-
             const pct = Number(final);
             const currentText = finalEl.innerText.replace("%","") || "0";
             const currentValue = parseFloat(currentText) || 0;
 
             animatePercentage(finalEl, currentValue, pct, 500);
-
             fill.style.width = Math.min(Math.max(pct, 0), 100) + "%";
 
+            // FIX 1: update chartColor AND immediately redraw trend if it's visible
             if(pct < 40){
                 finalEl.classList.add("result-danger");
                 fill.style.background = "var(--danger)";
-            }
-            else if(pct < 65){
+                chartColor = "#da3633";
+            } else if(pct < 65){
                 finalEl.classList.add("result-warning");
                 fill.style.background = "var(--warning)";
-            }
-            else if(pct < 85){
+                chartColor = "#d29922";
+            } else if(pct < 85){
                 finalEl.classList.add("result-good");
                 fill.style.background = "var(--success)";
-            }
-            else{
+                chartColor = "#2ea043";
+            } else {
                 finalEl.classList.add("result-excellent");
-                fill.style.background = "var(--gread_success)";
+                fill.style.background = "#166534";
+                chartColor = "#166534";
             }
 
+            // FIX 1: redraw chart with updated color if trend is currently shown
+            if(so.length >= 2 && trendChart){
+                updateTrend();
+            }
+
+            if(badge){
+                if(pct < 40)       { badge.textContent = "Неудовлетворительно"; badge.className = "grade-badge badge-danger"; }
+                else if(pct < 65)  { badge.textContent = "Удовлетворительно";   badge.className = "grade-badge badge-warning"; }
+                else if(pct < 85)  { badge.textContent = "Хорошо";              badge.className = "grade-badge badge-good"; }
+                else               { badge.textContent = "Отлично 🎉";           badge.className = "grade-badge badge-excellent"; }
+            }
         } else {
             finalEl.innerText = "—";
             fill.style.width = "0%";
+            if(badge){ badge.textContent = "Нет данных"; badge.className = "grade-badge badge-empty"; }
         }
 
         saveState();
@@ -362,19 +368,18 @@ async function calculate(){
         console.error("calculate error", e);
     } finally {
         pending = false;
-        if(pendingAgain) calculate(); // повторяем пропущенный запрос
+        if(pendingAgain) calculate();
     }
 }
 
 document.getElementById("addForm").addEventListener("submit", function(e){
     e.preventDefault();
-
     const v = Number(document.getElementById("soInput").value);
     if(Number.isFinite(v) && v >= 2 && v <= 10){
         so.push(v);
         document.getElementById("soInput").value = "";
         saveState();
-        renderSO();   // updateTrend вызывается внутри renderSO
+        renderSO();
         calculate();
     }
 });
@@ -383,39 +388,24 @@ const sorDialedInput = document.getElementById("sorDialed");
 const sorMaxInput = document.getElementById("sorMax");
 
 sorDialedInput.addEventListener("input", function(){
-    if(this.value.length >= 2){
-        sorMaxInput.focus();
-    }
+    if(this.value.length >= 2) sorMaxInput.focus();
 });
 
 const sochDialedInput = document.getElementById("sochDialed");
 const sochMaxInput = document.getElementById("sochMax");
 
 sochDialedInput.addEventListener("input", function(){
-    if(this.value.length >= 2){
-        sochMaxInput.focus();
-    }
+    if(this.value.length >= 2) sochMaxInput.focus();
 });
 
 function premiumAutoJump(fromInput, toInput, maxDigits = 2){
-
-    // ИСПРАВЛЕНО: убрали обрезание значения — "100" больше не станет "10"
     fromInput.addEventListener("input", function(e){
-
-        // Удаляем всё кроме цифр
         this.value = this.value.replace(/\D/g, "");
-
-        // Только прыгаем на следующее поле, НЕ обрезаем значение
-        if(
-            this.value.length >= maxDigits &&
-            this.selectionStart === this.value.length
-        ){
+        if(this.value.length >= maxDigits && this.selectionStart === this.value.length){
             toInput.focus();
             toInput.select();
         }
     });
-
-    // Если в следующем поле нажали backspace на пустом — вернуться назад
     toInput.addEventListener("keydown", function(e){
         if(e.key === "Backspace" && this.value.length === 0){
             fromInput.focus();
@@ -424,26 +414,17 @@ function premiumAutoJump(fromInput, toInput, maxDigits = 2){
     });
 }
 
-premiumAutoJump(
-    document.getElementById("sorDialed"),
-    document.getElementById("sorMax"),
-    2
-);
-
-premiumAutoJump(
-    document.getElementById("sochDialed"),
-    document.getElementById("sochMax"),
-    2
-);
+premiumAutoJump(document.getElementById("sorDialed"), document.getElementById("sorMax"), 2);
+premiumAutoJump(document.getElementById("sochDialed"), document.getElementById("sochMax"), 2);
 
 let trendChart;
+let chartColor = "#58a6ff";
 
 /* ---------- init ---------- */
 (function init(){
     loadState();
     renderSO();
     renderSORS();
-    // небольшая задержка, чтобы DOM успел отрисоваться
     setTimeout(()=> {
         calculate();
         if(so.length >= 2) updateTrend();
@@ -456,150 +437,119 @@ document.getElementById('year').textContent = new Date().getFullYear();
 function toggleTrendVisibility(show){
     const box = document.querySelector(".trend-box");
     if(!box) return;
-
     if(show){
         box.classList.remove("collapsed");
     } else {
         box.classList.add("collapsed");
-
-        if(trendChart){
-            try{
-                trendChart.destroy();
-            }catch(e){}
-            trendChart = null;
-        }
-
+        if(trendChart){ try{ trendChart.destroy(); }catch(e){} trendChart = null; }
         const acc = document.getElementById("aiAccuracy");
         if(acc) acc.textContent = "--%";
-
         const label = document.getElementById("trendLabel");
         if(label) label.textContent = "—";
     }
 }
 
 async function updateTrend(){
-
-    if(so.length < 2){
-        toggleTrendVisibility(false);
-        return;
-    }
-
+    if(so.length < 2){ toggleTrendVisibility(false); return; }
     toggleTrendVisibility(true);
-
     try{
-
         const response = await fetch("/trend", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-                scores: so
-            })
+            body: JSON.stringify({ scores: so })
         });
-
         const data = await response.json();
-
-        drawTrend(
-            data.scores,
-            data.predictions,
-            data.accuracy
-        );
-
-        if(trendChart && typeof trendChart.resize === "function"){
-            trendChart.resize();
-        }
-
+        drawTrend(data.scores, data.predictions, data.accuracy);
+        if(trendChart && typeof trendChart.resize === "function") trendChart.resize();
     }catch(e){
         console.error("trend error", e);
     }
+}
 
+function hexToRgba(hex, a){
+    const r=parseInt(hex.slice(1,3),16), g=parseInt(hex.slice(3,5),16), b=parseInt(hex.slice(5,7),16);
+    return `rgba(${r},${g},${b},${a})`;
 }
 
 function drawTrend(scores, predictions, accuracy){
     const canvas = document.getElementById("trendChart");
-    if (!canvas) return;
+    if(!canvas) return;
     const ctx = canvas.getContext("2d");
 
-    if (trendChart) trendChart.destroy();
+    if(trendChart) trendChart.destroy();
 
-    // --- защита от пустых массивов ---
     if(!Array.isArray(scores)) scores = [];
     if(!Array.isArray(predictions)) predictions = [];
 
     const len = Math.min(scores.length, predictions.length);
-    if(len === 0) return; // нечего рисовать
+    if(len === 0) return;
 
-    scores = scores.slice(0,len).map(v=>Math.min(Math.max(Number(v)||2,2),10));
+    scores      = scores.slice(0,len).map(v=>Math.min(Math.max(Number(v)||2,2),10));
     predictions = predictions.slice(0,len).map(v=>Math.min(Math.max(Number(v)||2,2),10));
 
-    const labels = Array.from({length:len}, (_,i)=>i+1);
+    const labels = Array.from({length:len}, (_,i)=>"Ур."+(i+1));
+    const color  = chartColor; // FIX 1: uses current chartColor at draw time
+    const h      = canvas.offsetHeight || 145;
 
-    const scoreGradient = ctx.createLinearGradient(0,0,0,140);
-    scoreGradient.addColorStop(0,"rgba(88,166,255,0.9)");
-    scoreGradient.addColorStop(1,"rgba(88,166,255,0.05)");
+    const scoreGrad = ctx.createLinearGradient(0,0,0,h);
+    scoreGrad.addColorStop(0,   hexToRgba(color, 0.30));
+    scoreGrad.addColorStop(0.65,hexToRgba(color, 0.06));
+    scoreGrad.addColorStop(1,   hexToRgba(color, 0.00));
 
-    const predictGradient = ctx.createLinearGradient(0,0,0,140);
-    predictGradient.addColorStop(0,"rgba(46,160,67,0.9)");
-    predictGradient.addColorStop(1,"rgba(46,160,67,0.05)");
+    const predGrad = ctx.createLinearGradient(0,0,0,h);
+    predGrad.addColorStop(0, "rgba(139,148,158,0.12)");
+    predGrad.addColorStop(1, "rgba(139,148,158,0.00)");
 
-    trendChart = new Chart(ctx,{
-        type:"line",
-        data:{
+    trendChart = new Chart(ctx, {
+        type: "line",
+        data: {
             labels,
-            datasets:[
+            datasets: [
                 {
-                    data:scores,
-                    borderColor:"#58a6ff",
-                    backgroundColor:scoreGradient,
-                    borderWidth:3,
-                    tension:0.45,
-                    fill:true,
-                    pointRadius:4,
-                    pointHoverRadius:6
+                    data: scores,
+                    borderColor: color,
+                    backgroundColor: scoreGrad,
+                    borderWidth: 2.5,
+                    tension: 0.42,
+                    fill: true,
+                    pointBackgroundColor: color,
+                    pointBorderColor: "#060a10",
+                    pointBorderWidth: 2,
+                    pointRadius: 5,
+                    pointHoverRadius: 5
                 },
                 {
-                    data:predictions,
-                    borderColor:"#2ea043",
-                    backgroundColor:predictGradient,
-                    borderWidth:2,
-                    tension:0.45,
-                    fill:true,
-                    pointRadius:0
+                    data: predictions,
+                    borderColor: "rgba(139,148,158,0.45)",
+                    backgroundColor: predGrad,
+                    borderWidth: 1.5,
+                    borderDash: [5,4],
+                    tension: 0.3,
+                    fill: true,
+                    pointRadius: 0,
+                    pointHoverRadius: 0
                 }
             ]
         },
         options: {
             responsive: true,
             maintainAspectRatio: false,
-            layout: { padding: 6 },
-            animation: {
-                duration: 700,
-                easing: "easeOutQuart"
-            },
-            plugins:{
-                legend:{ display:false },
-                tooltip:{
-                    backgroundColor:"#161b22",
-                    borderColor:"#30363d",
-                    borderWidth:1,
-                    titleColor:"#fff",
-                    bodyColor:"#c9d1d9"
-                }
-            },
-            scales:{
-                x:{
-                    grid:{ color:"rgba(255,255,255,0.04)" },
-                    ticks:{ color:"#8b949e", maxRotation:0, autoSkip:true, maxTicksLimit:5 }
+            layout: { padding: { top:8, right:6, bottom:2, left:2 } },
+            animation: { duration:550, easing:"easeOutCubic" },
+            events: [],
+            plugins: { legend: { display: false }, tooltip: { enabled: false } },
+            scales: {
+                x: {
+                    grid:   { color:"rgba(255,255,255,0.04)", drawBorder:false },
+                    border: { display:false },
+                    ticks:  { color:"#6e7681", font:{size:10}, maxRotation:0, maxTicksLimit:6 }
                 },
-                y:{
-                    min:2,
-                    max:10,
-                    grid:{ color:"rgba(255,255,255,0.04)" },
-                    ticks:{ color:"#8b949e", stepSize:2, maxTicksLimit:5 }
+                y: {
+                    min:1, max:10,
+                    grid:   { color:"rgba(255,255,255,0.05)", drawBorder:false },
+                    border: { display:false },
+                    ticks:  { color:"#6e7681", font:{size:10}, stepSize:3, maxTicksLimit:4 }
                 }
-            },
-            elements: {
-                point: { radius: 3, hoverRadius:5 },
-                line: { tension: 0.36 }
             }
         }
     });
@@ -607,8 +557,31 @@ function drawTrend(scores, predictions, accuracy){
     document.getElementById("aiAccuracy").textContent = accuracy + "%";
 
     const trend = predictions[predictions.length-1] - predictions[0];
-    let text = "Стабильно";
-    if(trend > 0.3) text = "Тенденция роста (СО) 📈";
-    if(trend < -0.3) text = "Тенденция падения (СО) 📉";
+    let text;
+    if      (trend >  0.6) text = "📈 Отличный рост! Продолжай в том же духе";
+    else if (trend >  0.2) text = "📈 Небольшой рост";
+    else if (trend < -0.6) text = "📉 Оценки снижаются — стоит уделить внимание";
+    else if (trend < -0.2) text = "📉 Лёгкое снижение";
+    else                   text = "📊 Стабильная динамика";
     document.getElementById("trendLabel").textContent = text;
 }
+
+/* ---------- PWA ---------- */
+if('serviceWorker' in navigator){
+    window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/static/sw.js')
+            .then(reg => console.log('SW registered', reg.scope))
+            .catch(err => console.warn('SW registration failed', err));
+    });
+}
+
+/* ---------- Офлайн-баннер ---------- */
+(function setupOfflineBanner(){
+    const banner = document.getElementById("offlineBanner");
+    if(!banner) return;
+    function show(){ banner.style.display = "block"; }
+    function hide(){ banner.style.display = "none"; }
+    if(!navigator.onLine) show();
+    window.addEventListener("offline", show);
+    window.addEventListener("online",  hide);
+})();

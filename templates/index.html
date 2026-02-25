@@ -6,29 +6,33 @@
     <link rel="icon" type="image/png" sizes="16x16" href="/static/icons/favicon-16x16.png">
     <link rel="apple-touch-icon" href="/static/icons/apple-touch-icon.png">
     <link rel="manifest" href="/static/site.webmanifest">
-    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="stylesheet" href="/static/css/style.css?v=1.2.0">
     <meta charset="utf-8">
     <title>Калькулятор СО, СОР, СОЧ онлайн — расчет итоговой оценки | Казахстан</title>
     <meta name="language" content="ru">
     <meta http-equiv="content-language" content="ru">
     <meta property="og:locale" content="ru_RU">
-    <meta name="description" content="Онлайн калькулятор СО, СОР и СОЧ для школ Казахстана. Быстрый расчёт итоговой оценки за четверть и процента успеваемости. Бесплатно и без регистрации.">    <meta property="og:title" content="Калькулятор успеваемости онлайн">
+    <meta name="description" content="Онлайн калькулятор СО, СОР и СОЧ для школ Казахстана. Быстрый расчёт итоговой оценки за четверть и процента успеваемости. Бесплатно и без регистрации.">
+    <meta property="og:title" content="Калькулятор успеваемости онлайн">
     <meta property="og:description" content="Быстрый расчет СО, СОР и СОЧ. Бесплатно и без регистрации.">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://bilimcalc.vercel.app/">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
     <link rel="canonical" href="https://bilimcalc.vercel.app/">
     <meta property="og:site_name" content="Калькулятор СО СОР СОЧ">
     <meta property="og:image" content="https://bilimcalc.vercel.app/static/preview.png">
     <meta name="theme-color" content="#0f1117">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="preconnect" href="https://cdn.jsdelivr.net">
     <script type="application/ld+json">
     {
-    "@context": "https://schema.org",
-    "@type": "WebSite",
-    "name": "Калькулятор СО СОР СОЧ",
-    "url": "https://bilimcalc.vercel.app/",
-    "applicationCategory": "EducationalApplication",
-    "operatingSystem": "All"
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        "name": "Калькулятор СО СОР СОЧ",
+        "url": "https://bilimcalc.vercel.app/",
+        "applicationCategory": "EducationalApplication",
+        "operatingSystem": "All"
     }
     </script>
 </head>
@@ -37,14 +41,15 @@
     <h1>BilimCalc — калькулятор итоговой оценки</h1>
 
     <div class="grid">
-        <!-- left column -->
+        <!-- левая колонка -->
         <div>
+
             <!-- СО -->
             <div class="card">
                 <div class="section-title">СО</div>
-                <div class="row">
+                <div class="so-row">
                     <form id="addForm">
-                        <input id="soInput" type="number" placeholder="Введите значение">
+                        <input id="soInput" type="number" inputmode="decimal" placeholder="Введите значение">
                         <button class="btn" type="submit">Добавить</button>
                     </form>
                     <button class="btn ghost" id="clearSoBtn" title="Очистить все СО">Очистить</button>
@@ -55,58 +60,79 @@
             <!-- СОР -->
             <div class="card" style="margin-top:16px">
                 <div class="section-title">СОР</div>
-                <div class="row">
-                    <form id="sorForm" style="display:flex; gap:8px; width:100%;">
+                <div class="sor-row">
+                    <form id="sorForm">
                         <input id="sorDialed" type="number" inputmode="numeric" placeholder="Набрал">
-                        <input id="sorMax" type="number" placeholder="Максимум">
+                        <input id="sorMax"    type="number" inputmode="numeric" placeholder="Максимум">
                         <button class="btn" type="submit">Добавить</button>
                     </form>
                     <button class="btn ghost" id="clearSorsBtn">Очистить</button>
                 </div>
-                <div class="list" id="sorList"></div>       
+                <div class="list" id="sorList"></div>
             </div>
 
             <!-- СОЧ -->
             <div class="card" style="margin-top:16px">
-                <div class="section-title">
-                    СОЧ
-                </div>
-                <div class="row">
-                    <input id="sochDialed" type="number" inputmode="numeric" placeholder="Набрал">
-                    <input id="sochMax" type="number" placeholder="Максимум">
+                <div class="section-title">СОЧ</div>
+                <div class="soch-row">
+                    <div class="soch-inputs">
+                        <input id="sochDialed" type="number" inputmode="numeric" placeholder="Набрал">
+                        <input id="sochMax"    type="number" inputmode="numeric" placeholder="Максимум">
+                    </div>
                     <button class="btn ghost" id="clearSochBtn">Очистить</button>
                 </div>
             </div>
+
         </div>
 
-        <!-- right column (results) -->
+        <!-- правая колонка -->
         <div>
             <div class="card">
                 <div class="result-big" id="finalResult">—</div>
+                <div class="grade-badge badge-empty" id="gradeBadge">Нет данных</div>
                 <div class="subtitle">Автоматический расчёт. Результат обновляется при изменении.</div>
 
                 <a href="https://help.bilimland.kz/l_RUS/knowledge_base/item/354267"
-                target="_blank"
-                rel="noopener noreferrer"
-                class="official-link">
-                📘 Официальная методика расчёта
+                   target="_blank" rel="noopener noreferrer" class="official-link">
+                    <span class="bilim-logo">
+                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <rect x="2" y="2" width="9" height="9" rx="2" fill="#3cb648"/>
+                            <rect x="13" y="2" width="9" height="9" rx="2" fill="#3cb648"/>
+                            <rect x="2" y="13" width="9" height="9" rx="2" fill="#3cb648"/>
+                            <path d="M15 18h4M17 16v4" stroke="#3cb648" stroke-width="2.2" stroke-linecap="round"/>
+                        </svg>
+                    </span>
+                    <span class="link-text">
+                        <span class="link-text-top">Bilim Class</span>
+                        <span class="link-text-main">Официальная методика расчёта</span>
+                    </span>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.6)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="margin-left:auto;flex-shrink:0"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
                 </a>
 
                 <div class="progress-wrap">
                     <div class="progress-bar">
                         <div class="progress-fill" id="progressFill"></div>
                     </div>
+
                     <div class="trend-box">
                         <div class="trend-header">
-                            <span>AI анализ</span>
+                            <div class="trend-header-left">
+                                <span>AI анализ</span>
+                                <span class="t-legend">
+                                    <span class="t-legend-line solid"></span>оценки
+                                </span>
+                                <span class="t-legend">
+                                    <span class="t-legend-line dashed"></span>тренд
+                                </span>
+                            </div>
                             <span id="aiAccuracy">--%</span>
                         </div>
-
-                        <div id="trendContainer" style="height:250px; width:100%;">
+                        <div id="trendContainer" style="height:145px; width:100%;">
                             <canvas id="trendChart"></canvas>
                         </div>
                         <div class="trend-label" id="trendLabel">—</div>
                     </div>
+                    <div class="trend-hint">Добавьте 2+ оценок СО для AI-анализа</div>
 
                     <div class="breakdown" id="breakdown">
                         <div class="break-card">
@@ -119,7 +145,6 @@
                             <div class="break-value" id="breakSors">—</div>
                             <div class="small" id="breakSorsDetails"></div>
                         </div>
-
                         <div class="break-card">
                             <div class="break-title">СОЧ</div>
                             <div class="break-value" id="breakSoch">—</div>
@@ -129,38 +154,33 @@
                 </div>
 
             </div>
-
         </div>
     </div>
-    <div class="card" style="margin-top:20px">
-    <h2 style="color:#58a6ff;">О проекте</h2>
-    <p class="small">
-        Данный онлайн-калькулятор предназначен для быстрого и точного расчёта итоговой
-        оценки по системе СО, СОР и СОЧ в школах Казахстана. Сервис автоматически
-        вычисляет процент успеваемости и помогает ученикам заранее узнать свой итоговый результат.
-        Сервис подходит для учеников 5–11 классов, родителей и учителей.
-        Работает бесплатно, без регистрации и доступен с любого устройства.
-    </p>
-    <p class="small">
-        Проект открытый и учебный. Исходный код доступен на GitHub.
-    </p>
-    </div>
-    <div style="margin-top:25px; text-align:center;" class="small">
-    Разработчик: Anton |
-    <a href="https://github.com/antonbogdan165" target="_blank" style="color:#58a6ff;">
-        GitHub
-    </a>
-    </div>
-<footer style="margin-top: 40px; padding: 20px 0; text-align: center; color: #666; font-size: 0.9em; border-top: 1px solid #eee;">
-    <div>© <span id="year">2026</span> BilimCalc. All rights reserved.</div>
-    <div style="margin-top: 5px; opacity: 0.7;">Version 1.1.1</div>
-</footer>
-</div>
-<script
-  src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"
-  integrity="sha384-JUh163oCRItcbPme8pYnROHQMC6fNKTBWtRG3I3I0erJkzNgL7uxKlNwcrcFKeqF"
-  crossorigin="anonymous"></script>
-<script src="/static/js/main.js"></script>
 
+    <div class="card" style="margin-top:20px">
+        <h2>О проекте</h2>
+        <p class="small">
+            BilimCalc — это удобный онлайн-калькулятор для расчёта итоговой оценки по системе СО, СОР и СОЧ в школах Казахстана.
+            Сервис автоматически вычисляет процент успеваемости и помогает ученикам заранее узнать свой итоговый результат.
+            Сервис подходит для учеников 5–11 классов, родителей и учителей.
+            Работает бесплатно, без регистрации и доступен с любого устройства.
+        </p>
+        <p class="small" style="margin-top:7px">
+            Проект открытый и учебный. Исходный код доступен на GitHub.
+        </p>
+    </div>
+
+    <footer>
+        <div>Разработчик: Anton · <a href="https://github.com/antonbogdan165" target="_blank">GitHub</a></div>
+        <div style="margin-top:5px;opacity:.6">© <span id="year"></span> BilimCalc · v1.2.0</div>
+    </footer>
+
+</div>
+
+<script
+    src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"
+    integrity="sha384-JUh163oCRItcbPme8pYnROHQMC6fNKTBWtRG3I3I0erJkzNgL7uxKlNwcrcFKeqF"
+    crossorigin="anonymous"></script>
+<script src="/static/js/main.js?v=1.2.0"></script>
 </body>
 </html>

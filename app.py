@@ -23,6 +23,13 @@ def index():
 def static_from_root():
     return send_from_directory('static', request.path[1:])
 
+@app.route('/sw.js')
+def service_worker():
+    response = send_from_directory('static/js', 'sw.js')
+    response.headers['Service-Worker-Allowed'] = '/'
+    response.headers['Cache-Control'] = 'no-cache, no-store, must-revalidate'
+    return response
+
 @app.route('/calculate', methods=['POST'])
 def calculate():
     data = request.get_json(silent=True)
@@ -68,4 +75,3 @@ def trend():
         return jsonify({"error": "ML анализ недоступен"}), 500
     
     return jsonify(result)
-    
