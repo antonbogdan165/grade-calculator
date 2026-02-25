@@ -566,7 +566,25 @@ function drawTrend(scores, predictions, accuracy){
     document.getElementById("trendLabel").textContent = text;
 }
 
-/* ---------- PWA ---------- */
+/* ---------- FAQ Accordion ---------- */
+(function initFAQ(){
+    document.querySelectorAll(".faq-q").forEach(btn => {
+        btn.addEventListener("click", function(){
+            const item = this.closest(".faq-item");
+            const isOpen = item.classList.contains("open");
+            // Close all
+            document.querySelectorAll(".faq-item.open").forEach(i => {
+                i.classList.remove("open");
+                i.querySelector(".faq-q").setAttribute("aria-expanded", "false");
+            });
+            // Open clicked if it was closed
+            if(!isOpen){
+                item.classList.add("open");
+                this.setAttribute("aria-expanded", "true");
+            }
+        });
+    });
+})();
 if('serviceWorker' in navigator){
     window.addEventListener('load', () => {
         navigator.serviceWorker.register('/static/sw.js')

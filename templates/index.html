@@ -6,7 +6,7 @@
     <link rel="icon" type="image/png" sizes="16x16" href="/static/icons/favicon-16x16.png">
     <link rel="apple-touch-icon" href="/static/icons/apple-touch-icon.png">
     <link rel="manifest" href="/site.webmanifest">
-    <link rel="stylesheet" href="/static/css/style.css?v=1.2.0">
+    <link rel="stylesheet" href="/static/css/style.css?v=1.2.1">
     <meta charset="utf-8">
     <title>BilimCalc — калькулятор СО, СОР и СОЧ онлайн</title>
     <meta name="language" content="ru">
@@ -53,18 +53,34 @@
     "@type": "FAQPage",
     "mainEntity": [{
         "@type": "Question",
-        "name": "Как рассчитать итоговую оценку за четверть?",
+        "name": "Как рассчитывается итоговая оценка?",
         "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Введите результаты СО, СОР и СОЧ, калькулятор автоматически рассчитает процент успеваемости."
+        "text": "Итоговая оценка рассчитывается по методике МОН РК: СО × 25% + СОР × 25% + СОЧ × 50%. Если СОЧ не было — сумма СО и СОР умножается на 2."
         }
     },
     {
         "@type": "Question",
-        "name": "Работает ли калькулятор по системе Казахстана?",
+        "name": "Что такое СО, СОР и СОЧ?",
         "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Да, расчет основан на официальной методике оценивания школ Казахстана."
+        "text": "СО — суммативное оценивание по шкале 2–10. СОР — суммативное оценивание за раздел. СОЧ — суммативное оценивание за четверть."
+        }
+    },
+    {
+        "@type": "Question",
+        "name": "Для каких классов подходит калькулятор?",
+        "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Для учеников 5–11 классов школ Казахстана с системой суммативного оценивания."
+        }
+    },
+    {
+        "@type": "Question",
+        "name": "Сохраняются ли введённые данные?",
+        "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Да, данные сохраняются в localStorage браузера и не отправляются на сервер."
         }
     }]
     }
@@ -206,17 +222,63 @@
 
     <footer>
         <div>Разработчик: Anton · <a href="https://github.com/antonbogdan165" target="_blank">GitHub</a></div>
-        <div style="margin-top:5px;opacity:.6">© <span id="year"></span> BilimCalc · v1.2.0</div>
+        <div style="margin-top:5px;opacity:.6">© <span id="year"></span> BilimCalc · v1.2.1</div>
     </footer>
 
-    <div class="card" style="margin-top:20px; font-size:14px;">
+    <div class="card faq-card" style="margin-top:20px;">
     <h2>Часто задаваемые вопросы</h2>
 
-    <h3>Как рассчитать итоговую оценку за четверть?</h3>
-    <p>Введите результаты СО, СОР и СОЧ, калькулятор автоматически рассчитает процент успеваемости.</p>
+    <div class="faq-list">
+        <div class="faq-item">
+            <button class="faq-q" aria-expanded="false">
+                <span>Как рассчитывается итоговая оценка?</span>
+                <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+            <div class="faq-a">
+                <p>Итоговая оценка рассчитывается по официальной методике МОН РК: <strong>СО × 25% + СОР × 25% + СОЧ × 50%</strong>. Если СОЧ не было — сумма СО и СОР умножается на 2, так как в сумме они дают 50%.</p>
+            </div>
+        </div>
 
-    <h3>Работает ли калькулятор по системе Казахстана?</h3>
-    <p>Да, расчет основан на официальной методике оценивания школ Казахстана.</p>
+        <div class="faq-item">
+            <button class="faq-q" aria-expanded="false">
+                <span>Что такое СО, СОР и СОЧ?</span>
+                <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+            <div class="faq-a">
+                <p><strong>СО</strong> — суммативное оценивание (формативные оценки) по шкале 2–10. <strong>СОР</strong> — суммативное оценивание за раздел (вводится набранный балл и максимум). <strong>СОЧ</strong> — суммативное оценивание за четверть (итоговая контрольная работа).</p>
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <button class="faq-q" aria-expanded="false">
+                <span>Для каких классов подходит калькулятор?</span>
+                <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+            <div class="faq-a">
+                <p>Калькулятор подходит для учеников <strong>5–11 классов</strong> школ Казахстана, где применяется система суммативного оценивания. Также полезен для учителей и родителей.</p>
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <button class="faq-q" aria-expanded="false">
+                <span>Что означает AI-анализ и тренд?</span>
+                <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+            <div class="faq-a">
+                <p>При добавлении 2+ оценок СО строится график динамики. Пунктирная линия — это <strong>линейная регрессия</strong>: математический тренд, показывающий направление изменения оценок. Процент точности отражает, насколько стабильны оценки.</p>
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <button class="faq-q" aria-expanded="false">
+                <span>Сохраняются ли введённые данные?</span>
+                <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+            <div class="faq-a">
+                <p>Да. Все данные автоматически сохраняются в памяти браузера (localStorage) и восстанавливаются при следующем посещении. Данные хранятся только на вашем устройстве и никуда не отправляются.</p>
+            </div>
+        </div>
+    </div>
     </div>
 
 </div>
@@ -225,6 +287,6 @@
     src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"
     integrity="sha384-JUh163oCRItcbPme8pYnROHQMC6fNKTBWtRG3I3I0erJkzNgL7uxKlNwcrcFKeqF"
     crossorigin="anonymous"></script>
-<script src="/static/js/main.js?v=1.2.0"></script>
+<script src="/static/js/main.js?v=1.2.1"></script>
 </body>
 </html>
