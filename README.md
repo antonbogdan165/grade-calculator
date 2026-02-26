@@ -11,7 +11,7 @@
   <img src="https://img.shields.io/badge/ML-Linear_Regression-orange">
   <img src="https://img.shields.io/badge/Deploy-Vercel-black?logo=vercel">
   <img src="https://img.shields.io/badge/Status-Active-success">
-  <img src="https://img.shields.io/badge/License-MIT-green">
+  <img src="https://img.shields.io/badge/license-CC--BY--NC--4.0-lightgrey">
 </p>
 
 ---
@@ -107,4 +107,8 @@ http://127.0.0.1:5000
 
 ## 📜 Лицензия
 
-MIT License
+Этот проект распространяется под лицензией  
+Creative Commons Attribution-NonCommercial 4.0 International (CC BY-NC 4.0).
+
+© 2026 Anton Bogdan
+
