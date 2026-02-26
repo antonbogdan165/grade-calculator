@@ -11,7 +11,7 @@
   <img src="https://img.shields.io/badge/ML-Linear_Regression-orange">
   <img src="https://img.shields.io/badge/Deploy-Vercel-black?logo=vercel">
   <img src="https://img.shields.io/badge/Status-Active-success">
-  ![License: CC BY-NC 4.0](https://img.shields.io/badge/license-CC--BY--NC--4.0-lightgrey.svg)
+  <img src="https://img.shields.io/badge/license-CC--BY--NC--4.0-lightgrey">
 </p>
 
 ---
