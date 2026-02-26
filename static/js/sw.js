@@ -4,7 +4,7 @@
    Отдаётся Flask по маршруту /sw.js
    ============================================= */
 
-const CACHE_NAME = "bilimcalc-v1.2.1";
+const CACHE_NAME = "bilimcalc-v1.2.1b";
 
 const STATIC_ASSETS = [
     "/",
