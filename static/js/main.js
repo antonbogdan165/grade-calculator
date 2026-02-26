@@ -375,7 +375,7 @@ async function calculate(){
 document.getElementById("addForm").addEventListener("submit", function(e){
     e.preventDefault();
     const v = Number(document.getElementById("soInput").value);
-    if(Number.isFinite(v) && v >= 2 && v <= 10){
+    if(Number.isFinite(v) && v >= 1 && v <= 10){
         so.push(v);
         document.getElementById("soInput").value = "";
         saveState();
