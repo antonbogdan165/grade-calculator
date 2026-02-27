@@ -1,0 +1,279 @@
+/* ══════════════════════════════════════════════
+   page-loader.css v1.1
+   Анимация загрузки — прогресс-бар, splash для
+   article-страниц, мобильный таб-бар
+   ══════════════════════════════════════════════ */
+
+/* ── Топ-полоска прогресса ── */
+#page-progress-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    z-index: 9999;
+    pointer-events: none;
+}
+
+#page-progress-fill {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, #3cb648, #58d168, #58a6ff, #3cb648);
+    background-size: 200% 100%;
+    border-radius: 0 3px 3px 0;
+    animation: progress-shimmer 1.8s linear infinite;
+    box-shadow: 0 0 10px rgba(88, 166, 255, 0.5), 0 0 4px rgba(60, 182, 72, 0.6);
+}
+
+@keyframes progress-shimmer {
+    0%   { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+}
+
+[data-theme="light"] #page-progress-fill {
+    box-shadow: 0 0 10px rgba(37, 99, 235, 0.4), 0 0 4px rgba(22, 163, 74, 0.5);
+}
+
+/* ─────────────────────────────────────────────
+   Splash — только для article-страниц (base.html)
+   index.html имеет свой #splash в style.css
+   ───────────────────────────────────────────── */
+#page-splash {
+    position: fixed;
+    inset: 0;
+    z-index: 10000;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 32px;
+    background: #0d1117;
+    transition: opacity 400ms ease, transform 400ms ease;
+}
+
+[data-theme="light"] #page-splash {
+    background: #f0f4f8;
+}
+
+#page-splash.splash--hide {
+    opacity: 0;
+    transform: scale(1.03);
+    pointer-events: none;
+}
+
+/* Используем те же классы что и в index.html — единый стиль */
+#page-splash .splash-logo {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    animation: splash-pop 0.5s cubic-bezier(.34,1.56,.64,1) both;
+}
+
+#page-splash .splash-logo svg {
+    filter: drop-shadow(0 0 16px rgba(60, 182, 72, 0.5));
+    animation: splash-pulse 1.2s ease-in-out infinite alternate;
+}
+
+#page-splash .splash-name {
+    font-size: 2.2rem;
+    font-weight: 800;
+    letter-spacing: -1px;
+    color: #fff;
+}
+
+[data-theme="light"] #page-splash .splash-name {
+    color: #0f172a;
+}
+
+#page-splash .splash-name span {
+    color: #3cb648;
+}
+
+#page-splash .splash-bar-wrap {
+    width: 160px;
+    height: 3px;
+    background: rgba(255,255,255,0.08);
+    border-radius: 99px;
+    overflow: hidden;
+    animation: splash-pop 0.5s 0.15s cubic-bezier(.34,1.56,.64,1) both;
+}
+
+[data-theme="light"] #page-splash .splash-bar-wrap {
+    background: rgba(0,0,0,0.08);
+}
+
+#page-splash .splash-bar-fill {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, #3cb648, #58a6ff);
+    border-radius: 99px;
+    transition: width 700ms cubic-bezier(.2,.9,.25,1);
+}
+
+@keyframes splash-pop {
+    from { opacity: 0; transform: scale(0.7) translateY(12px); }
+    to   { opacity: 1; transform: scale(1)   translateY(0); }
+}
+
+@keyframes splash-pulse {
+    from { filter: drop-shadow(0 0 10px rgba(60, 182, 72, 0.3)); }
+    to   { filter: drop-shadow(0 0 22px rgba(60, 182, 72, 0.7)); }
+}
+
+/* ── Улучшенная навигация (Desktop) — подчёркивание ── */
+.site-nav__link {
+    position: relative;
+    overflow: hidden;
+}
+
+.site-nav__link::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    right: 50%;
+    height: 2px;
+    background: var(--accent);
+    border-radius: 2px 2px 0 0;
+    transition: left 0.2s ease, right 0.2s ease;
+}
+
+.site-nav__link:hover::after,
+.site-nav__link.active::after {
+    left: 8px;
+    right: 8px;
+}
+
+.site-nav__link.active::after {
+    background: #3cb648;
+}
+
+/* ─────────────────────────────────────────────
+   Мобильный нижний Tab Bar
+   Показывается только на ≤600px
+   ───────────────────────────────────────────── */
+/* На десктопе скрываем таб-бар */
+#mobile-nav {
+    display: none;
+}
+
+@media (max-width: 600px) {
+    /* Скрываем десктопную навигацию в шапке */
+    .site-header .site-nav {
+        display: none;
+    }
+
+    /* Скрываем topbar-nav в index.html если он есть */
+    .topbar-nav {
+        display: none;
+    }
+
+    /* Показываем нижний таб-бар */
+    #mobile-nav {
+        display: flex;
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        z-index: 200;
+        background: rgba(13, 17, 23, 0.95);
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        border-top: 1px solid rgba(255,255,255,0.07);
+        align-items: stretch;
+        padding-bottom: env(safe-area-inset-bottom, 0px);
+    }
+
+    [data-theme="light"] #mobile-nav {
+        background: rgba(240,244,248,0.95);
+        border-top-color: rgba(0,0,0,0.08);
+    }
+
+    .mobile-nav__item {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 3px;
+        padding: 8px 4px 10px;
+        text-decoration: none;
+        color: var(--muted);
+        font-size: 10px;
+        font-weight: 500;
+        letter-spacing: 0.1px;
+        transition: color 0.15s ease, background 0.15s ease;
+        -webkit-tap-highlight-color: transparent;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .mobile-nav__item:active {
+        background: rgba(255,255,255,0.04);
+    }
+
+    [data-theme="light"] .mobile-nav__item:active {
+        background: rgba(0,0,0,0.04);
+    }
+
+    .mobile-nav__item.active {
+        color: #3cb648;
+    }
+
+    .mobile-nav__icon {
+        font-size: 20px;
+        line-height: 1;
+        display: block;
+        transition: transform 0.2s cubic-bezier(.34,1.56,.64,1);
+    }
+
+    .mobile-nav__item.active .mobile-nav__icon {
+        transform: scale(1.15) translateY(-1px);
+    }
+
+    /* Зелёная линия сверху активного пункта */
+    .mobile-nav__item.active::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 20%;
+        right: 20%;
+        height: 2px;
+        background: #3cb648;
+        border-radius: 0 0 4px 4px;
+        animation: tab-indicator 0.25s cubic-bezier(.34,1.56,.64,1) both;
+    }
+
+    @keyframes tab-indicator {
+        from { transform: scaleX(0); opacity: 0; }
+        to   { transform: scaleX(1); opacity: 1; }
+    }
+
+    /* Отступ снизу чтобы контент не перекрывался */
+    body {
+        padding-bottom: calc(62px + env(safe-area-inset-bottom, 0px));
+    }
+
+    /* Скрываем footer-ссылки — они дублируют таб-бар */
+    .site-footer__links {
+        display: none;
+    }
+}
+
+/* ── Ripple-эффект при тапе ── */
+@keyframes ripple-out {
+    from { transform: scale(0); opacity: 0.35; }
+    to   { transform: scale(3); opacity: 0; }
+}
+
+.ripple {
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(60, 182, 72, 0.4);
+    width: 40px;
+    height: 40px;
+    margin-left: -20px;
+    margin-top: -20px;
+    pointer-events: none;
+    animation: ripple-out 0.5s ease-out forwards;
+}
