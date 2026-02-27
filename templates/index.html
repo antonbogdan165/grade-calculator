@@ -138,10 +138,10 @@
             <a href="/kak-rasschitat-soch">СОЧ</a>
             <a href="/itogovaya-ocenka-za-chetvert">Итог</a>
         </nav>
-        <button id="topbarThemeBtn" class="theme-btn" onclick="ThemeToggle.toggle()" title="Переключить тему">
-            <span id="topbarThemeIcon">☀️</span>
-        </button>
     </div>
+    <button id="topbarThemeBtn" class="theme-btn" onclick="ThemeToggle.toggle()" title="Переключить тему">
+        <span id="topbarThemeIcon">☀️</span>
+    </button>
 </div>
 
 <div class="container" style="padding-top: 72px">
@@ -167,7 +167,7 @@
                 <div class="section-title">СО</div>
                 <div class="so-row">
                     <form id="addForm">
-                        <input id="soInput" type="number" inputmode="decimal" placeholder="Введите значение">
+                        <input id="soInput" type="text" inputmode="numeric" placeholder="Введите 1–10" maxlength="2" autocomplete="off">
                         <button class="btn" type="submit">Добавить</button>
                     </form>
                     <button class="btn ghost" id="clearSoBtn" title="Очистить все СО">Очистить</button>
@@ -180,8 +180,8 @@
                 <div class="section-title">СОР</div>
                 <div class="sor-row">
                     <form id="sorForm">
-                        <input id="sorDialed" type="number" inputmode="numeric" placeholder="Набрал">
-                        <input id="sorMax"    type="number" inputmode="numeric" placeholder="Максимум">
+                        <input id="sorDialed" type="text" inputmode="numeric" placeholder="Набрал" maxlength="2" autocomplete="off">
+                        <input id="sorMax"    type="text" inputmode="numeric" placeholder="Максимум" maxlength="2" autocomplete="off">
                         <button class="btn" type="submit">Добавить</button>
                     </form>
                     <button class="btn ghost" id="clearSorsBtn">Очистить</button>
@@ -194,8 +194,8 @@
                 <div class="section-title">СОЧ</div>
                 <div class="soch-row">
                     <div class="soch-inputs">
-                        <input id="sochDialed" type="number" inputmode="numeric" placeholder="Набрал">
-                        <input id="sochMax"    type="number" inputmode="numeric" placeholder="Максимум">
+                        <input id="sochDialed" type="text" inputmode="numeric" placeholder="Набрал" maxlength="2" autocomplete="off">
+                        <input id="sochMax"    type="text" inputmode="numeric" placeholder="Максимум" maxlength="2" autocomplete="off">
                     </div>
                     <button class="btn ghost" id="clearSochBtn">Очистить</button>
                 </div>
@@ -274,54 +274,6 @@
         </p>
     </div>
 
-    <!-- Блок статей — перелинковка на статейные страницы -->
-    <div class="card" style="margin-top:20px">
-        <h2>Полезные статьи</h2>
-        <p class="small" style="margin-bottom:16px">Подробные руководства по системе оценивания в школах Казахстана</p>
-        <div class="articles-grid">
-            <a href="/kak-rasschitat-so" class="article-card">
-                <div class="article-card__icon">СО</div>
-                <div class="article-card__body">
-                    <div class="article-card__title">Как рассчитать СО</div>
-                    <div class="article-card__desc">Формула, пример расчёта и советы по повышению среднего балла</div>
-                </div>
-                <span class="article-card__arrow">→</span>
-            </a>
-            <a href="/kak-rasschitat-sor" class="article-card">
-                <div class="article-card__icon" style="background: rgba(210,153,34,0.12); color: var(--warning); border-color: rgba(210,153,34,0.25)">СОР</div>
-                <div class="article-card__body">
-                    <div class="article-card__title">Как рассчитать СОР</div>
-                    <div class="article-card__desc">Суммативное оценивание за раздел: формула и пример с двумя СОР</div>
-                </div>
-                <span class="article-card__arrow">→</span>
-            </a>
-            <a href="/kak-rasschitat-soch" class="article-card">
-                <div class="article-card__icon" style="background: rgba(46,160,67,0.10); color: #56d364; border-color: rgba(46,160,67,0.25)">СОЧ</div>
-                <div class="article-card__body">
-                    <div class="article-card__title">Как рассчитать СОЧ</div>
-                    <div class="article-card__desc">Итоговая работа за четверть: формула, таблица, методика МОН РК</div>
-                </div>
-                <span class="article-card__arrow">→</span>
-            </a>
-            <a href="/itogovaya-ocenka-za-chetvert" class="article-card">
-                <div class="article-card__icon" style="background: rgba(88,166,255,0.10); color: var(--accent); border-color: rgba(88,166,255,0.25)">ИТ</div>
-                <div class="article-card__body">
-                    <div class="article-card__title">Итоговая оценка за четверть</div>
-                    <div class="article-card__desc">Полный расчёт СО + СОР + СОЧ и переводная шкала оценок</div>
-                </div>
-                <span class="article-card__arrow">→</span>
-            </a>
-            <a href="/metodika-rascheta-mon-rk" class="article-card">
-                <div class="article-card__icon" style="background: rgba(139,148,158,0.10); color: var(--muted); border-color: rgba(139,148,158,0.2)">МОН</div>
-                <div class="article-card__body">
-                    <div class="article-card__title">Методика МОН РК</div>
-                    <div class="article-card__desc">Официальная система критериального оценивания и нормативная база</div>
-                </div>
-                <span class="article-card__arrow">→</span>
-            </a>
-        </div>
-    </div>
-
     <footer>
         <div>Разработчик: Anton · <a href="https://github.com/antonbogdan165" target="_blank">GitHub</a></div>
         <div style="margin-top:5px;opacity:.6">© <span id="year"></span> BilimCalc · v1.3.3</div>
@@ -381,6 +333,53 @@
             </div>
         </div>
     </div>
+    </div>
+    <!-- Блок статей — перелинковка на статейные страницы -->
+    <div class="card" style="margin-top:20px">
+        <h2>Полезные статьи</h2>
+        <p class="small" style="margin-bottom:16px">Подробные руководства по системе оценивания в школах Казахстана</p>
+        <div class="articles-grid">
+            <a href="/kak-rasschitat-so" class="article-card">
+                <div class="article-card__icon">СО</div>
+                <div class="article-card__body">
+                    <div class="article-card__title">Как рассчитать СО</div>
+                    <div class="article-card__desc">Формула, пример расчёта и советы по повышению среднего балла</div>
+                </div>
+                <span class="article-card__arrow">→</span>
+            </a>
+            <a href="/kak-rasschitat-sor" class="article-card">
+                <div class="article-card__icon" style="background: rgba(210,153,34,0.12); color: var(--warning); border-color: rgba(210,153,34,0.25)">СОР</div>
+                <div class="article-card__body">
+                    <div class="article-card__title">Как рассчитать СОР</div>
+                    <div class="article-card__desc">Суммативное оценивание за раздел: формула и пример с двумя СОР</div>
+                </div>
+                <span class="article-card__arrow">→</span>
+            </a>
+            <a href="/kak-rasschitat-soch" class="article-card">
+                <div class="article-card__icon" style="background: rgba(46,160,67,0.10); color: #56d364; border-color: rgba(46,160,67,0.25)">СОЧ</div>
+                <div class="article-card__body">
+                    <div class="article-card__title">Как рассчитать СОЧ</div>
+                    <div class="article-card__desc">Итоговая работа за четверть: формула, таблица, методика МОН РК</div>
+                </div>
+                <span class="article-card__arrow">→</span>
+            </a>
+            <a href="/itogovaya-ocenka-za-chetvert" class="article-card">
+                <div class="article-card__icon" style="background: rgba(88,166,255,0.10); color: var(--accent); border-color: rgba(88,166,255,0.25)">ИТ</div>
+                <div class="article-card__body">
+                    <div class="article-card__title">Итоговая оценка за четверть</div>
+                    <div class="article-card__desc">Полный расчёт СО + СОР + СОЧ и переводная шкала оценок</div>
+                </div>
+                <span class="article-card__arrow">→</span>
+            </a>
+            <a href="/metodika-rascheta-mon-rk" class="article-card">
+                <div class="article-card__icon" style="background: rgba(139,148,158,0.10); color: var(--muted); border-color: rgba(139,148,158,0.2)">МОН</div>
+                <div class="article-card__body">
+                    <div class="article-card__title">Методика МОН РК</div>
+                    <div class="article-card__desc">Официальная система критериального оценивания и нормативная база</div>
+                </div>
+                <span class="article-card__arrow">→</span>
+            </a>
+        </div>
     </div>
 
 </div>

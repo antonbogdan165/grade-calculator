@@ -372,50 +372,92 @@ async function calculate(){
     }
 }
 
-document.getElementById("addForm").addEventListener("submit", function(e){
-    e.preventDefault();
-    const v = Number(document.getElementById("soInput").value);
-    if(Number.isFinite(v) && v >= 1 && v <= 10){
-        so.push(v);
-        document.getElementById("soInput").value = "";
-        saveState();
-        renderSO();
-        calculate();
-    }
-});
-
-const sorDialedInput = document.getElementById("sorDialed");
-const sorMaxInput = document.getElementById("sorMax");
-
-sorDialedInput.addEventListener("input", function(){
-    if(this.value.length >= 2) sorMaxInput.focus();
-});
-
-const sochDialedInput = document.getElementById("sochDialed");
-const sochMaxInput = document.getElementById("sochMax");
-
-sochDialedInput.addEventListener("input", function(){
-    if(this.value.length >= 2) sochMaxInput.focus();
-});
-
-function premiumAutoJump(fromInput, toInput, maxDigits = 2){
-    fromInput.addEventListener("input", function(e){
-        this.value = this.value.replace(/\D/g, "");
-        if(this.value.length >= maxDigits && this.selectionStart === this.value.length){
-            toInput.focus();
-            toInput.select();
+/**
+ * Делает инпут «только цифры».
+ * maxLen  — максимальное количество цифр (2 для SOR/SOC, 2 для SO)
+ * maxVal  — если задан, значение не может превышать это число (10 для SO)
+ * onFull  — callback когда достигнут maxLen (для автоперехода фокуса)
+ */
+function makeDigitsOnly(input, maxLen, maxVal, onFull) {
+    // keydown — блокируем нецифровые клавиши сразу
+    input.addEventListener("keydown", function(e) {
+        const allowed = [
+            "Backspace","Delete","ArrowLeft","ArrowRight",
+            "Tab","Enter","Home","End"
+        ];
+        if (allowed.includes(e.key)) return;
+        if (e.ctrlKey || e.metaKey) return; // copy/paste/select-all
+        if (!/^\d$/.test(e.key)) {
+            e.preventDefault();
+            return;
+        }
+        // Запрещаем ввод, если уже maxLen цифр (и нет выделения)
+        if (this.value.length >= maxLen && this.selectionStart === this.selectionEnd) {
+            e.preventDefault();
         }
     });
-    toInput.addEventListener("keydown", function(e){
-        if(e.key === "Backspace" && this.value.length === 0){
-            fromInput.focus();
-            fromInput.setSelectionRange(fromInput.value.length, fromInput.value.length);
+
+    // input — очищаем нецифровое (на случай paste / автозаполнения)
+    input.addEventListener("input", function() {
+        let v = this.value.replace(/\D/g, "");
+        if (v.length > maxLen) v = v.slice(0, maxLen);
+
+        // Зажимаем максимальное значение (для СО ≤ 10)
+        if (maxVal !== undefined && v !== "" && Number(v) > maxVal) {
+            v = String(maxVal);
         }
+
+        if (this.value !== v) this.value = v;
+
+        if (onFull && v.length >= maxLen) onFull();
     });
 }
 
-premiumAutoJump(document.getElementById("sorDialed"), document.getElementById("sorMax"), 2);
-premiumAutoJump(document.getElementById("sochDialed"), document.getElementById("sochMax"), 2);
+// SO: только 1–10, не больше 2 символов
+const soInput = document.getElementById("soInput");
+makeDigitsOnly(soInput, 2, 10);
+
+document.getElementById("addForm").addEventListener("submit", function(e){
+    e.preventDefault();
+    const raw = soInput.value.trim();
+    const v = Number(raw);
+    if (raw === "" || !Number.isFinite(v) || v < 1 || v > 10) {
+        showInputError(document.getElementById("addForm"), "Введите значение от 1 до 10");
+        soInput.style.borderColor = "var(--danger)";
+        return;
+    }
+    so.push(v);
+    soInput.value = "";
+    clearInputError(soInput);
+    saveState();
+    renderSO();
+    calculate();
+});
+
+// SOR
+const sorDialedInput = document.getElementById("sorDialed");
+const sorMaxInput    = document.getElementById("sorMax");
+makeDigitsOnly(sorDialedInput, 2, undefined, () => sorMaxInput.focus());
+makeDigitsOnly(sorMaxInput, 2);
+// Backspace из пустого sorMax → назад в sorDialed
+sorMaxInput.addEventListener("keydown", function(e) {
+    if (e.key === "Backspace" && this.value.length === 0) {
+        sorDialedInput.focus();
+        sorDialedInput.setSelectionRange(sorDialedInput.value.length, sorDialedInput.value.length);
+    }
+});
+
+// SOC
+const sochDialedInput = document.getElementById("sochDialed");
+const sochMaxInput    = document.getElementById("sochMax");
+makeDigitsOnly(sochDialedInput, 2, undefined, () => sochMaxInput.focus());
+makeDigitsOnly(sochMaxInput, 2);
+sochMaxInput.addEventListener("keydown", function(e) {
+    if (e.key === "Backspace" && this.value.length === 0) {
+        sochDialedInput.focus();
+        sochDialedInput.setSelectionRange(sochDialedInput.value.length, sochDialedInput.value.length);
+    }
+});
 
 let trendChart;
 let chartColor = "#58a6ff";

@@ -38,7 +38,7 @@ h1 {
     text-align: center;
     margin: 10px 0 28px;
     font-weight: 700;
-    color: #fff;
+    color: var(--success); text-shadow: 0 0 28px rgba(46,160,67,0.45);
     font-size: clamp(1.3rem, 4vw, 1.9rem);
     letter-spacing: -0.2px;
 }
@@ -98,7 +98,8 @@ h1 {
 .soch-inputs input { flex: 1; min-width: 0; }
 
 /* ── Инпуты ── */
-input[type="number"] {
+input[type="number"],
+input[type="text"] {
     background: var(--surface);
     border: 1px solid #23262b;
     color: #e6edf3;
@@ -110,8 +111,10 @@ input[type="number"] {
     min-height: 40px;
     transition: border-color 0.18s ease, box-shadow 0.18s ease;
 }
-input[type="number"]::placeholder { color: var(--muted); font-size: 13px; }
-input[type="number"]:focus {
+input[type="number"]::placeholder,
+input[type="text"]::placeholder { color: var(--muted); font-size: 13px; }
+input[type="number"]:focus,
+input[type="text"]:focus {
     border-color: var(--accent);
     box-shadow: 0 0 0 3px rgba(88,166,255,0.12);
 }
@@ -717,13 +720,16 @@ footer a { color: var(--accent); text-decoration: none; }
     box-shadow: 0 8px 32px rgba(0,0,0,0.13);
 }
 
-[data-theme="light"] input[type="number"] {
+[data-theme="light"] input[type="number"],
+[data-theme="light"] input[type="text"] {
     background: #f8fafc;
     border-color: #cbd5e1;
     color: #0f172a;
 }
-[data-theme="light"] input[type="number"]::placeholder { color: #94a3b8; }
-[data-theme="light"] input[type="number"]:focus {
+[data-theme="light"] input[type="number"]::placeholder,
+[data-theme="light"] input[type="text"]::placeholder { color: #94a3b8; }
+[data-theme="light"] input[type="number"]:focus,
+[data-theme="light"] input[type="text"]:focus {
     border-color: var(--accent);
     box-shadow: 0 0 0 3px rgba(37,99,235,0.12);
 }
@@ -836,6 +842,10 @@ footer a { color: var(--accent); text-decoration: none; }
     line-height: 1;
     margin: 0;
     letter-spacing: -0.02em;
+    text-shadow:
+        0 0 12px rgba(88, 166, 255, 0.55),
+        0 0 32px rgba(88, 166, 255, 0.25),
+        0 0 64px rgba(60, 182, 72, 0.12);
 }
 /* letter-spacing добавляет зазор после последнего символа перед span —
    компенсируем отрицательным margin */
@@ -947,7 +957,7 @@ footer a { color: var(--accent); text-decoration: none; }
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 0 20px;
+    padding: 0 16px;
     height: 52px;
     background: rgba(13,17,23,0.94);
     backdrop-filter: blur(12px);
@@ -975,6 +985,8 @@ footer a { color: var(--accent); text-decoration: none; }
     display: flex;
     align-items: center;
     gap: 8px;
+    flex: 1;
+    justify-content: center;
 }
 
 /* Официальная методика в топбаре */
