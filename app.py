@@ -100,3 +100,7 @@ def metodika_article():
 @app.route('/favicon.ico')
 def favicon():
     return send_from_directory('static/icons', 'favicon.ico')
+
+@app.errorhandler(404)
+def page_not_found(e):
+    return render_template('404.html'), 404

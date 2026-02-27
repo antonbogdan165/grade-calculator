@@ -1,0 +1,109 @@
+{% extends "base.html" %}
+
+{% block meta_title %}Страница не найдена — 404 | BilimCalc{% endblock %}
+{% block meta_desc %}Страница не найдена. Вернитесь на главную страницу BilimCalc — калькулятор СО, СОР и СОЧ для школ Казахстана.{% endblock %}
+{% block canonical %}https://bilimcalc.vercel.app/{% endblock %}
+
+{# Поисковикам не нужно индексировать 404 #}
+{% block extra_css %}
+<meta name="robots" content="noindex, nofollow">
+{% endblock %}
+
+{% block content %}
+<div class="not-found-wrap">
+
+    <div class="not-found-code">404</div>
+
+    <h1 class="not-found-title">Страница не найдена</h1>
+    <p class="not-found-text">
+        Возможно, адрес введён неверно или страница была удалена.<br>
+        Попробуй одну из ссылок ниже.
+    </p>
+
+    <a href="/" class="btn not-found-btn">
+        Открыть калькулятор →
+    </a>
+
+    <div class="not-found-links">
+        <div class="not-found-links__title">Полезные страницы</div>
+        <div class="not-found-links__grid">
+            <a href="/kak-rasschitat-so"   class="not-found-link">Как рассчитать СО</a>
+            <a href="/kak-rasschitat-sor"  class="not-found-link">Как рассчитать СОР</a>
+            <a href="/kak-rasschitat-soch" class="not-found-link">Как рассчитать СОЧ</a>
+            <a href="/itogovaya-ocenka-za-chetvert" class="not-found-link">Итоговая оценка</a>
+            <a href="/metodika-rascheta-mon-rk"     class="not-found-link">Методика МОН РК</a>
+        </div>
+    </div>
+
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<style>
+.not-found-wrap {
+    max-width: 480px;
+    margin: 0 auto;
+    padding: 60px 20px 80px;
+    text-align: center;
+}
+.not-found-code {
+    font-size: clamp(80px, 20vw, 120px);
+    font-weight: 900;
+    line-height: 1;
+    letter-spacing: -4px;
+    background: linear-gradient(135deg, #3fb950 0%, #58a6ff 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 16px;
+    user-select: none;
+}
+.not-found-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 12px;
+}
+.not-found-text {
+    font-size: 15px;
+    color: var(--muted);
+    line-height: 1.7;
+    margin-bottom: 28px;
+}
+.not-found-btn {
+    display: inline-block;
+    text-decoration: none;
+    font-size: 15px;
+    padding: 12px 28px;
+    margin-bottom: 48px;
+}
+.not-found-links__title {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    margin-bottom: 14px;
+}
+.not-found-links__grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+}
+.not-found-link {
+    padding: 7px 14px;
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 8px;
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 13px;
+    transition: color 0.15s, border-color 0.15s, background 0.15s;
+}
+.not-found-link:hover {
+    color: var(--accent);
+    border-color: rgba(88,166,255,0.3);
+    background: rgba(88,166,255,0.05);
+}
+</style>
+{% endblock %}
