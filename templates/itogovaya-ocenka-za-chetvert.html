@@ -1,0 +1,337 @@
+{% extends "base.html" %}
+
+{% block meta_title %}Итоговая оценка за четверть в Казахстане — формула расчёта СО, СОР, СОЧ | BilimCalc{% endblock %}
+
+{% block meta_desc %}Как рассчитывается итоговая оценка за четверть в школах Казахстана. Формула СО + СОР + СОЧ, пошаговый пример, переводная шкала оценок. Методика МОН РК.{% endblock %}
+
+{% block canonical %}https://bilimcalc.vercel.app/itogovaya-ocenka-za-chetvert{% endblock %}
+
+{% block og_type %}article{% endblock %}
+{% block og_title %}Итоговая оценка за четверть: формула расчёта СО, СОР и СОЧ{% endblock %}
+{% block og_desc %}Полный разбор расчёта итоговой оценки за четверть по методике МОН РК. Формула, пример, переводная шкала.{% endblock %}
+{% block og_url %}https://bilimcalc.vercel.app/itogovaya-ocenka-za-chetvert{% endblock %}
+
+{% block nav_itog %}active{% endblock %}
+
+
+{% block schema_extra %}
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "Итоговая оценка за четверть в школах Казахстана: как рассчитывается",
+    "description": "Формула расчёта итоговой оценки за четверть: СО + СОР + СОЧ, пошаговый пример и переводная шкала по методике МОН РК",
+    "url": "https://bilimcalc.vercel.app/itogovaya-ocenka-za-chetvert",
+    "datePublished": "2025-09-01",
+    "dateModified": "2026-02-01",
+    "inLanguage": "ru",
+    "author": {
+        "@type": "Person",
+        "name": "Anton",
+        "url": "https://github.com/antonbogdan165"
+    },
+    "publisher": {
+        "@type": "Organization",
+        "name": "BilimCalc",
+        "logo": {
+            "@type": "ImageObject",
+            "url": "https://bilimcalc.vercel.app/static/icons/favicon-32x32.png"
+        }
+    },
+    "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "https://bilimcalc.vercel.app/itogovaya-ocenka-za-chetvert"
+    }
+}
+</script>
+
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+        {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Главная",
+            "item": "https://bilimcalc.vercel.app/"
+        },
+        {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "Итоговая оценка за четверть",
+            "item": "https://bilimcalc.vercel.app/itogovaya-ocenka-za-chetvert"
+        }
+    ]
+}
+</script>
+{% endblock %}
+
+
+{% block content %}
+<div class="article-wrap">
+
+    <nav class="breadcrumb" aria-label="Хлебные крошки">
+        <a href="/">Главная</a>
+        <span class="breadcrumb__sep" aria-hidden="true">›</span>
+        <span aria-current="page">Итоговая оценка за четверть</span>
+    </nav>
+
+    <div class="article-layout">
+
+        <article class="article" itemscope itemtype="https://schema.org/Article">
+
+            <h1 class="article__title" itemprop="headline">
+                Итоговая оценка за четверть: как рассчитывается по методике МОН РК
+            </h1>
+
+            <div class="article__meta">
+                <time datetime="2026-02-01" itemprop="dateModified">Обновлено: февраль 2026</time>
+                <span class="article__meta-sep">·</span>
+                <span>6 мин чтения</span>
+            </div>
+
+            <p class="article__lead">
+                Итоговая оценка за четверть в казахстанской школе — это не просто среднее арифметическое.
+                Она считается по строгой формуле из трёх компонентов: <strong>СО, СОР и СОЧ</strong>,
+                каждый из которых имеет свой вес. Разберём всё по шагам.
+            </p>
+
+            <h2>Из чего состоит итоговая оценка</h2>
+            <p>
+                Итоговая оценка за четверть в школах Казахстана складывается из трёх компонентов: СО, СОР и СОЧ. Каждый из них отвечает за свой тип знаний и имеет фиксированный вес. Такая система помогает объективно оценить успеваемость школьника, а не один случайный результат.
+            </p>
+            <p>
+                СО (суммативное оценивание) — это оценки за темы и разделы в течение четверти. Они показывают, насколько стабильно ты учишься. Вес СО в итоговой оценке за четверть составляет 25%.
+            </p>
+            <p>
+                СОР (суммативное оценивание за раздел) проверяет крупные блоки программы. Обычно это контрольные или большие работы. СОР также составляет 25% итоговой оценки.
+            </p>
+            <p>
+                СОЧ (суммативное оценивание за четверть) — итоговая работа в конце четверти. Она показывает общий уровень знаний и весит больше всего — <strong>50%</strong>. Именно такая схема используется в расчёте оценки по методике МОН РК.
+            </p>
+
+            <div class="article__weights">
+                <div class="article__weight-item">
+                    <div class="article__weight-label">СО</div>
+                    <div class="article__weight-bar">
+                        <div class="article__weight-fill" style="width: 25%; background: var(--accent)"></div>
+                    </div>
+                    <div class="article__weight-pct">25%</div>
+                </div>
+                <div class="article__weight-item">
+                    <div class="article__weight-label">СОР</div>
+                    <div class="article__weight-bar">
+                        <div class="article__weight-fill" style="width: 25%; background: var(--warning)"></div>
+                    </div>
+                    <div class="article__weight-pct">25%</div>
+                </div>
+                <div class="article__weight-item">
+                    <div class="article__weight-label">СОЧ</div>
+                    <div class="article__weight-bar">
+                        <div class="article__weight-fill" style="width: 50%; background: var(--success)"></div>
+                    </div>
+                    <div class="article__weight-pct">50%</div>
+                </div>
+            </div>
+
+            <h2>Полная формула расчёта</h2>
+            <p>
+                Для большинства предметов применяется стандартная формула СО + СОР + СОЧ. Каждый компонент переводится в проценты по своей шкале, после чего результаты суммируются и дают итоговую оценку за четверть.
+            </p>
+
+            <div class="article__formula">
+                <div class="article__formula-title">Стандартная формула (все три компонента)</div>
+                <div class="article__formula-body">
+                    Итог = (среднее СО ÷ 10 × 25) + (среднее СОР% × 0.25) + (СОЧ% × 0.50)
+                </div>
+            </div>
+
+            <p>
+                Если СОЧ не проводилось, формула меняется: вес перераспределяется между СО и СОР, каждый получает по 50%. В редких случаях, когда есть только СО, итог считается только по нему с масштабированием до 100%.
+            </p>
+
+            <div class="article__formula">
+                <div class="article__formula-title">Без СОЧ</div>
+                <div class="article__formula-body">
+                    Итог = (СО% + СОР%) × 2
+                </div>
+            </div>
+
+            <h2>Пошаговый пример расчёта</h2>
+            <p>
+                Представим реальную ситуацию. За четверть у тебя среднее СО — 8 баллов из 10. Это значит, что вклад СО равен 8 ÷ 10 × 25 = 20%.
+            </p>
+            <p>
+                Средний результат по СОР — 70%. Так как вес СОР составляет 25%, его вклад в итог будет 70% × 0,25 = 17,5%. СОЧ ты написал на 80%, а значит вклад СОЧ — 80% × 0,50 = 40%.
+            </p>
+
+            <div class="article__example">
+                <table class="article__table">
+                    <thead>
+                        <tr>
+                            <th>Компонент</th>
+                            <th>Результат</th>
+                            <th>Вес</th>
+                            <th>Вклад</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>СО</td>
+                            <td>8 / 10</td>
+                            <td>25%</td>
+                            <td>20%</td>
+                        </tr>
+                        <tr>
+                            <td>СОР</td>
+                            <td>70%</td>
+                            <td>25%</td>
+                            <td>17.5%</td>
+                        </tr>
+                        <tr>
+                            <td>СОЧ</td>
+                            <td>80%</td>
+                            <td>50%</td>
+                            <td>40%</td>
+                        </tr>
+                        <tr class="article__table-result">
+                            <td colspan="3"><strong>Итоговая оценка</strong></td>
+                            <td><strong>77.5%</strong></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <p>
+                Итог: 20% + 17,5% + 40% = <strong>77,5%</strong>. По переводной шкале это оценка «4». Проверить свои расчёты без ошибок помогает <a href="/">калькулятор СОЧ онлайн</a> — особенно если оценок много.
+            </p>
+
+            <h2>Переводная шкала оценок</h2>
+            <p>
+                После подсчёта процентов результат переводится в привычную школьную оценку. Используется единая переводная шкала, которая помогает быстро оценить реальный уровень знаний.
+            </p>
+
+            <div class="article__example">
+                <table class="article__table">
+                    <thead>
+                        <tr>
+                            <th>Процент</th>
+                            <th>Оценка</th>
+                            <th>Уровень</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>85% и выше</td>
+                            <td><strong style="color: #56d364">5</strong></td>
+                            <td>Отлично</td>
+                        </tr>
+                        <tr>
+                            <td>65–84%</td>
+                            <td><strong style="color: #e3b341">4</strong></td>
+                            <td>Хорошо</td>
+                        </tr>
+                        <tr>
+                            <td>40–64%</td>
+                            <td><strong style="color: var(--warning)">3</strong></td>
+                            <td>Удовлетворительно</td>
+                        </tr>
+                        <tr>
+                            <td>Меньше 40%</td>
+                            <td><strong style="color: var(--danger)">2</strong></td>
+                            <td>Неудовлетворительно</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <p>
+                Например, если итоговая оценка за четверть составила 77,5%, в журнал пойдёт «4». Поэтому важно следить не только за баллами, но и за процентами — они напрямую определяют отметку.
+            </p>
+
+            <h2>Как поднять итоговую оценку</h2>
+            <p>
+                Первое правило — не игнорируй СО. Даже небольшие оценки накапливаются и сильно влияют на итог. Стабильная работа в течение четверти даёт лучший результат, чем один удачный тест в конце.
+            </p>
+            <p>
+                Второе — готовься к СОЧ серьёзно. Этот компонент весит 50%, поэтому именно он чаще всего решает итоговую оценку за четверть. Повторение тем перед СОЧ почти всегда повышает результат.
+            </p>
+            <p>
+                Третье — регулярно проверяй свои проценты. <a href="/">Калькулятор онлайн</a> помогает понять, что ещё можно улучшить до конца четверти, и показывает реальную картину успеваемости.
+            </p>
+
+            <h2>Часто задаваемые вопросы</h2>
+
+            <h3>Что важнее — СОЧ или СОР?</h3>
+            <p>По весу важнее СОЧ — он даёт 50% итоговой оценки. СОР и СО имеют по 25%. Но это не значит, что СОР можно недооценивать. Один слабый СОЧ может снизить итоговую оценку за четверть на целый балл, а хороший СОР помогает его компенсировать.</p>
+
+            <h3>Можно ли исправить итоговую оценку?</h3>
+            <p>Официально итоговая оценка за четверть не пересдаётся. Иногда учитель может учесть дополнительную работу, но это редкость. Поэтому лучше влиять на результат заранее через СО и СОЧ, а не надеяться на исправление после.</p>
+
+            <h3>Как итоговая оценка влияет на аттестат?</h3>
+            <p>Итоговые оценки за четверти формируют годовую оценку по предмету. Именно годовые оценки идут в аттестат. Поэтому стабильная успеваемость в течение всего года важнее одной удачной четверти.</p>
+
+            <div class="article__related">
+                <div class="article__related-title">Читайте также</div>
+                <div class="article__related-links">
+                    <a href="/kak-rasschitat-soch" class="article__related-card">
+                        <span class="article__related-label">Статья</span>
+                        <span class="article__related-text">Как рассчитать СОЧ — формула и пример</span>
+                        <span class="article__related-arrow">→</span>
+                    </a>
+                    <a href="/kak-rasschitat-sor" class="article__related-card">
+                        <span class="article__related-label">Статья</span>
+                        <span class="article__related-text">Как рассчитать СОР — полное руководство</span>
+                        <span class="article__related-arrow">→</span>
+                    </a>
+                    <a href="/kak-rasschitat-so" class="article__related-card">
+                        <span class="article__related-label">Статья</span>
+                        <span class="article__related-text">Что такое СО и как считается</span>
+                        <span class="article__related-arrow">→</span>
+                    </a>
+                    <a href="/metodika-rascheta-mon-rk" class="article__related-card">
+                        <span class="article__related-label">Статья</span>
+                        <span class="article__related-text">Официальная методика расчёта МОН РК</span>
+                        <span class="article__related-arrow">→</span>
+                    </a>
+                </div>
+            </div>
+
+        </article>
+
+        <aside class="article-sidebar">
+
+            <div class="sidebar-widget sidebar-widget--cta">
+                <div class="sidebar-widget__title">Рассчитать онлайн</div>
+                <p class="sidebar-widget__text">
+                    Введи свои баллы за СО, СОР и СОЧ — калькулятор мгновенно покажет итоговую оценку за четверть
+                </p>
+                <a href="/" class="btn sidebar-widget__btn">
+                    Открыть калькулятор →
+                </a>
+            </div>
+
+            <div class="sidebar-widget">
+                <div class="sidebar-widget__title">Веса компонентов</div>
+                <div class="sidebar-widget__formula">СО = 25%</div>
+                <div class="sidebar-widget__formula" style="margin-top:6px">СОР = 25%</div>
+                <div class="sidebar-widget__formula" style="margin-top:6px">СОЧ = 50%</div>
+                <div class="sidebar-widget__note" style="margin-top:8px">Итого = 100%</div>
+            </div>
+
+            <div class="sidebar-widget">
+                <div class="sidebar-widget__title">Другие статьи</div>
+                <nav class="sidebar-nav">
+                    <a href="/kak-rasschitat-so"  class="sidebar-nav__link">→ Как рассчитать СО</a>
+                    <a href="/kak-rasschitat-sor" class="sidebar-nav__link">→ Как рассчитать СОР</a>
+                    <a href="/kak-rasschitat-soch" class="sidebar-nav__link">→ Как рассчитать СОЧ</a>
+                    <a href="/metodika-rascheta-mon-rk" class="sidebar-nav__link">→ Методика МОН РК</a>
+                </nav>
+            </div>
+
+        </aside>
+
+    </div>
+</div>
+{% endblock %}

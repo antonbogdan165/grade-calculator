@@ -107,8 +107,8 @@ http://127.0.0.1:5000
 
 ## 📜 Лицензия
 
-Этот проект распространяется под лицензией  
-Creative Commons Attribution-NonCommercial 4.0 International (CC BY-NC 4.0).
+This project is licensed under the Creative Commons Attribution-NonCommercial 4.0 International License.
 
 © 2026 Anton Bogdan
 
+Full license text: https://creativecommons.org/licenses/by-nc/4.0/

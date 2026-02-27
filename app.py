@@ -75,3 +75,28 @@ def trend():
         return jsonify({"error": "ML анализ недоступен"}), 500
     
     return jsonify(result)
+
+# Страницы-статьи
+@app.route('/kak-rasschitat-soch')
+def how_to_calculate_soch():
+    return render_template('kak-rasschitat-soch.html')
+
+@app.route('/kak-rasschitat-sor')
+def how_to_calculate_sor():
+    return render_template('kak-rasschitat-sor.html')
+
+@app.route('/kak-rasschitat-so')
+def how_to_calculate_so():
+    return render_template('kak-rasschitat-so.html')
+
+@app.route('/itogovaya-ocenka-za-chetvert')
+def itogovaya_article():
+    return render_template('itogovaya-ocenka-za-chetvert.html')
+
+@app.route('/metodika-rascheta-mon-rk')
+def metodika_article():
+    return render_template('metodika-rascheta-mon-rk.html')
+
+@app.route('/favicon.ico')
+def favicon():
+    return send_from_directory('static/icons', 'favicon.ico')

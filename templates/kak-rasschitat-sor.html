@@ -1,0 +1,333 @@
+{#
+    kak-rasschitat-sor.html — СТРАНИЦА-СТАТЬЯ "/kak-rasschitat-sor"
+    ==================================================================
+
+    КАК ЧИТАТЬ ЭТОТ ФАЙЛ:
+    Всё что в {% ... %} или {{ ... }} — это Jinja2 (язык шаблонов Flask).
+    Всё остальное — обычный HTML который ты уже знаешь.
+
+    {% extends "base.html" %}   → "я наследую base.html"
+    {% block ИМЯ %} ... {% endblock %}  → "заполняю дырку с именем ИМЯ"
+
+    Чтобы сделать новую страницу (например /kak-rasschitat-sor):
+    1. Скопируй этот файл
+    2. Поменяй все блоки meta_ и og_ на нужные тексты
+    3. Поменяй canonical URL
+    4. Поменяй schema_extra (даты, заголовок статьи)
+    5. Поменяй breadcrumb (хлебные крошки)
+    6. Напиши свой контент внутри {% block content %}
+    7. Активируй нужный пункт в nav (убери nav_sor, добавь nav_sor)
+#}
+
+{% extends "base.html" %}
+
+
+{# ══════════════════════════════════════════
+   SEO-БЛОКИ — самое важное для поиска
+   ══════════════════════════════════════════ #}
+
+{# Заголовок вкладки браузера и заголовок в Google #}
+{% block meta_title %}Как рассчитать СОР в школе Казахстана — формула и пример | BilimCalc{% endblock %}
+
+{# Описание под заголовком в результатах поиска (160 символов макс) #}
+{% block meta_desc %}Узнайте как рассчитать СОР — суммативное оценивание за раздел. Формула расчёта, пример с числами, официальная методика МОН РК. Проверьте свой результат онлайн.{% endblock %}
+
+{# Canonical — говорит Google: "это главная версия этой страницы" #}
+{% block canonical %}https://bilimcalc.vercel.app/kak-rasschitat-sor{% endblock %}
+
+{# Для соцсетей #}
+{% block og_type %}article{% endblock %}
+{% block og_title %}Как рассчитать СОР — формула, пример, методика МОН РК{% endblock %}
+{% block og_desc %}Полное руководство по расчёту суммативного оценивания за раздел для школ Казахстана.{% endblock %}
+{% block og_url %}https://bilimcalc.vercel.app/kak-rasschitat-sor{% endblock %}
+
+{# Подсветить пункт СОР в навигации #}
+{% block nav_sor %}active{% endblock %}
+
+
+{# ══════════════════════════════════════════
+   МИКРОРАЗМЕТКА — помогает Google понять
+   структуру страницы и показать расширенный
+   сниппет (дату, автора, хлебные крошки)
+   ══════════════════════════════════════════ #}
+{% block schema_extra %}
+
+{# Article schema — Google видит это как статью с автором и датой #}
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "Как рассчитать СОР в школе Казахстана",
+    "description": "Формула расчёта суммативного оценивания за раздел, пример с числами, официальная методика МОН РК",
+    "url": "https://bilimcalc.vercel.app/kak-rasschitat-sor",
+    "datePublished": "2025-09-01",
+    "dateModified": "2026-02-01",
+    "inLanguage": "ru",
+    "author": {
+        "@type": "Person",
+        "name": "Anton",
+        "url": "https://github.com/antonbogdan165"
+    },
+    "publisher": {
+        "@type": "Organization",
+        "name": "BilimCalc",
+        "logo": {
+            "@type": "ImageObject",
+            "url": "https://bilimcalc.vercel.app/static/icons/favicon-32x32.png"
+        }
+    },
+    "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "https://bilimcalc.vercel.app/kak-rasschitat-sor"
+    }
+}
+</script>
+
+{# BreadcrumbList schema — хлебные крошки в результатах Google #}
+{# Выглядит так: bilimcalc.vercel.app › Как рассчитать СОР #}
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+        {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Главная",
+            "item": "https://bilimcalc.vercel.app/"
+        },
+        {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "Как рассчитать СОР",
+            "item": "https://bilimcalc.vercel.app/kak-rasschitat-sor"
+        }
+    ]
+}
+</script>
+
+{% endblock %}
+
+
+{# ══════════════════════════════════════════
+   КОНТЕНТ СТРАНИЦЫ
+   ══════════════════════════════════════════ #}
+{% block content %}
+
+{# Контейнер статьи #}
+<div class="article-wrap">
+
+    {# ── Хлебные крошки (визуальные, не только schema) ── #}
+    {# Важно для UX и тоже помогает SEO #}
+    <nav class="breadcrumb" aria-label="Хлебные крошки">
+        <a href="/">Главная</a>
+        <span class="breadcrumb__sep" aria-hidden="true">›</span>
+        <span aria-current="page">Как рассчитать СОР</span>
+    </nav>
+
+    {# ── Основной контент — две колонки на десктопе ── #}
+    <div class="article-layout">
+
+        {# ── ЛЕВАЯ КОЛОНКА: статья ── #}
+        <article class="article" itemscope itemtype="https://schema.org/Article">
+
+            {# Заголовок H1 — должен быть ОДИН на странице и содержать ключевое слово #}
+            <h1 class="article__title" itemprop="headline">
+                Как рассчитать СОР: формула, пример и методика МОН РК
+            </h1>
+
+            {# Мета-строка статьи: дата и время чтения #}
+            <div class="article__meta">
+                <time datetime="2026-02-01" itemprop="dateModified">Обновлено: февраль 2026</time>
+                <span class="article__meta-sep">·</span>
+                <span>5 мин чтения</span>
+            </div>
+
+            <p class="article__lead">
+                СОР — суммативное оценивание за раздел — это контрольная работа,
+                которая составляет <strong>25% итоговой оценки</strong> за четверть. Именно поэтому
+                правильный расчёт СОР так важен для каждого ученика казахстанской школы.
+            </p>
+
+            <h2>Что такое СОР</h2>
+            <p>
+                СОР — это суммативное оценивание за раздел или сквозную тему, которое показывает, насколько ты усвоил конкретный блок материала. Обычно СОР проводится несколько раз за четверть, чаще всего два раза, чтобы учитель мог объективно оценить твои знания. Каждая СОР проверяет не весь материал за четверть, а конкретный раздел, поэтому готовиться к ней проще и конкретнее.
+                СОР помогает понять свои сильные и слабые стороны по отдельным темам. Для учителя это инструмент объективной оценки, а для тебя — возможность заранее скорректировать знания. Используя калькулятор СОР онлайн, можно быстро увидеть, как набранные баллы влияют на оценку за раздел Казахстан. Так ты легко планируешь подготовку и распределяешь усилия между разделами.
+            </p>
+
+            <h2>Формула расчёта СОР</h2>
+            <p>
+                Чтобы рассчитать СОР, берут проценты по всем СОР за четверть, находят среднее арифметическое и умножают на 0.25. Почему 0.25? Потому что СОР весит четверть итоговой оценки за четверть. Даже если СО и СОЧ сильные, слабые результаты по СОР могут снизить общий балл.
+                Важно правильно считать среднее, чтобы увидеть реальный результат и понять, над какими разделами стоит работать. С помощью калькулятора СОР онлайн ты быстро получаешь процент и видишь, как СОР влияет на оценку за раздел Казахстан.
+            </p>
+
+            {# Блок с формулой — выделен визуально #}
+            <div class="article__formula">
+                <div class="article__formula-title">Формула СОР</div>
+                <div class="article__formula-body">
+                    СОР (в итоговой оценке) = (Набранные баллы СОР1 + Набранные баллы СОР2 + ... ÷ Максимальные баллы СОР1 + Максимальные баллы СОР2 + ...) × 25
+                </div>
+            </div>
+
+            <h2>Пример расчёта</h2>
+            <p>
+                Предположим, СОР1: 12 из 15 баллов, СОР2: 12 из 16 баллов. Сначала переводи баллы в проценты: СОР1 = 80%, СОР2 = 75%. Затем находишь среднее арифметическое: (80% + 75%) ÷ 2 = 77.5%. После этого умножаем на 0.25, так как СОР составляет 25% итоговой оценки за четверть.
+                Такой подход позволяет точно видеть, как каждая СОР влияет на общий результат. Используя калькулятор СОР онлайн, можно мгновенно получить итоговую долю СОР в оценке за раздел Казахстан и планировать подготовку к следующим проверкам.
+            </p>
+
+            {# Блок с примером — таблица #}
+            <div class="article__example">
+            <table class="article__table">
+                <thead>
+                    <tr>
+                        <th>Параметр</th>
+                        <th>СОР 1</th>
+                        <th>СОР 2</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Набрано баллов</td>
+                        <td>12</td>
+                        <td>9</td>
+                    </tr>
+                    <tr>
+                        <td>Максимум</td>
+                        <td>15</td>
+                        <td>15</td>
+                    </tr>
+                    <tr>
+                        <td>Процент</td>
+                        <td>12 ÷ 15 × 100 = 80%</td>
+                        <td>9 ÷ 15 × 100 = 60%</td>
+                    </tr>
+                    <tr class="article__table-result">
+                        <td><strong>Средний процент</strong></td>
+                        <td colspan="2"><strong>(80% + 60%) ÷ 2 = 70%</strong></td>
+                    </tr>
+                    <tr class="article__table-result">
+                        <td><strong>Вклад в итоговую оценку</strong></td>
+                        <td colspan="2"><strong>70% × 0.25 = 17.5 из 25</strong></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+            <h2>Сколько весит СОР в итоговой оценке</h2>
+            <p>
+                Основные отличия СОР и СОЧ заключаются в периодичности, весе и объёме материала. СОР проводится чаще — по разделам, обычно два раза за четверть, и весит 25% итоговой оценки. СОЧ проводится в конце четверти, проверяет весь материал и составляет 50% итоговой оценки.
+                Также СОР охватывает меньший объём информации, что делает её подготовку более управляемой. СОЧ требует комплексного понимания всех тем. Используя калькулятор СОР онлайн, ты можешь оценить, как отдельные СОР влияют на оценку за раздел Казахстан, а с калькулятором СОЧ онлайн — видеть общий результат за четверть.
+            </p>
+
+            {# Блок с весами компонентов #}
+            <div class="article__weights">
+                <div class="article__weight-item">
+                    <div class="article__weight-label">СО</div>
+                    <div class="article__weight-bar">
+                        <div class="article__weight-fill" style="width: 25%; background: var(--accent)"></div>
+                    </div>
+                    <div class="article__weight-pct">25%</div>
+                </div>
+                <div class="article__weight-item">
+                    <div class="article__weight-label">СОР</div>
+                    <div class="article__weight-bar">
+                        <div class="article__weight-fill" style="width: 25%; background: var(--warning)"></div>
+                    </div>
+                    <div class="article__weight-pct">25%</div>
+                </div>
+                <div class="article__weight-item">
+                    <div class="article__weight-label">СОЧ</div>
+                    <div class="article__weight-bar">
+                        <div class="article__weight-fill" style="width: 50%; background: var(--success)"></div>
+                    </div>
+                    <div class="article__weight-pct">50%</div>
+                </div>
+            </div>
+
+            <h2>Как повысить оценку за СОР</h2>
+            <p>
+                Чтобы хорошо сдать СОР, начни с повторения конкретного раздела. Разделяй материал на блоки и решай практические задания. Используй критерии оценивания от учителя, чтобы точно знать, что проверяется.
+                Практика — ключ к успеху: решай примеры, тесты и задачи по каждой теме. Не оставляй сложные моменты на последний день, разбивай подготовку на несколько дней. Если используешь калькулятор СОР онлайн, можно сразу видеть, сколько баллов тебе нужно набрать для желаемой оценки за раздел Казахстан. Совместная подготовка с друзьями или проверка знаний друг у друга помогает закрепить материал и выявить пробелы.
+            </p>
+
+            <h2>Часто задаваемые вопросы</h2>
+
+            <h3>Когда проводится СОР?</h3>
+            <p>Обычно за четверть проводится две СОР по каждому предмету. Иногда школа может назначить больше, если тема большая. Следи за расписанием, чтобы не пропустить важный тест.</p>
+
+            <h3>Можно ли пересдать СОР?</h3>
+            <p>Пропущенный СОР засчитывается только с разрешения учителя. Обычно назначают индивидуальную сдачу или перенос. Важно предупредить заранее, чтобы результат был учтён в итоговой оценке за раздел Казахстан.</p>
+
+            <h3>Что делать если пропустил СОР по болезни?</h3>
+            <p>Улучшить оценку можно при повторной сдаче с разрешения учителя. Используй дополнительные задания, практику и тесты по разделу. Системная подготовка и работа с критериями оценивания помогают повысить результат.</p>
+
+            {# ── Блок внутренней перелинковки ── #}
+            {# ВАЖНО для SEO: связываем страницы между собой #}
+            <div class="article__related">
+                <div class="article__related-title">Читайте также</div>
+                <div class="article__related-links">
+                    <a href="/kak-rasschitat-soch" class="article__related-card">
+                        <span class="article__related-label">Статья</span>
+                        <span class="article__related-text">Как рассчитать СОЧ — полное руководство</span>
+                        <span class="article__related-arrow">→</span>
+                    </a>
+                    <a href="/kak-rasschitat-so" class="article__related-card">
+                        <span class="article__related-label">Статья</span>
+                        <span class="article__related-text">Что такое СО и как считается</span>
+                        <span class="article__related-arrow">→</span>
+                    </a>
+                    <a href="/itogovaya-ocenka-za-chetvert" class="article__related-card">
+                        <span class="article__related-label">Статья</span>
+                        <span class="article__related-text">Итоговая оценка за четверть</span>
+                        <span class="article__related-arrow">→</span>
+                    </a>
+                    <a href="/metodika-rascheta-mon-rk" class="article__related-card">
+                        <span class="article__related-label">Статья</span>
+                        <span class="article__related-text">Официальная методика расчёта МОН РК</span>
+                        <span class="article__related-arrow">→</span>
+                    </a>
+                </div>
+            </div>
+
+        </article>
+
+        {# ── ПРАВАЯ КОЛОНКА: виджеты ── #}
+        <aside class="article-sidebar">
+
+            {# Виджет: CTA на калькулятор — самый важный #}
+            <div class="sidebar-widget sidebar-widget--cta">
+                <div class="sidebar-widget__title">Рассчитать онлайн</div>
+                <p class="sidebar-widget__text">
+                    Введи свои баллы за СОЧ, СОР и СО — калькулятор мгновенно покажет итоговую оценку
+                </p>
+                <a href="/" class="btn sidebar-widget__btn">
+                    Открыть калькулятор →
+                </a>
+            </div>
+
+            {# Виджет: быстрая шпаргалка #}
+            <div class="sidebar-widget">
+                <div class="sidebar-widget__title">Формула кратко</div>
+                <div class="sidebar-widget__formula">
+                    (Сумма набранных ÷ Сумма максимальных) × 25
+                </div>
+                <div class="sidebar-widget__note">СОР = 25% итоговой оценки</div>
+            </div>
+
+            {# Виджет: навигация по статьям #}
+            <div class="sidebar-widget">
+                <div class="sidebar-widget__title">Другие статьи</div>
+                <nav class="sidebar-nav">
+                    <a href="/kak-rasschitat-so"  class="sidebar-nav__link">→ Как рассчитать СО</a>
+                    <a href="/kak-rasschitat-soch" class="sidebar-nav__link">→ Как рассчитать СОЧ</a>
+                    <a href="/itogovaya-ocenka-za-chetvert" class="sidebar-nav__link">→ Итоговая оценка</a>
+                    <a href="/metodika-rascheta-mon-rk" class="sidebar-nav__link">→ Методика МОН РК</a>
+                </nav>
+            </div>
+
+        </aside>
+
+    </div>{# /article-layout #}
+</div>{# /article-wrap #}
+
+{% endblock %}

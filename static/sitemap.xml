@@ -1,7 +1,52 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-   <url>
-      <loc>https://bilimcalc.vercel.app/</loc>
-      <priority>1.0</priority>
-   </url>
+
+  <!-- Главная страница — калькулятор -->
+  <url>
+    <loc>https://bilimcalc.vercel.app/</loc>
+    <lastmod>2026-02-27</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+
+  <!-- Статья: Итоговая оценка за четверть -->
+  <url>
+    <loc>https://bilimcalc.vercel.app/itogovaya-ocenka-za-chetvert</loc>
+    <lastmod>2026-02-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <!-- Статья: Как рассчитать СОЧ -->
+  <url>
+    <loc>https://bilimcalc.vercel.app/kak-rasschitat-soch</loc>
+    <lastmod>2026-02-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <!-- Статья: Как рассчитать СОР -->
+  <url>
+    <loc>https://bilimcalc.vercel.app/kak-rasschitat-sor</loc>
+    <lastmod>2026-02-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Статья: Как рассчитать СО -->
+  <url>
+    <loc>https://bilimcalc.vercel.app/kak-rasschitat-so</loc>
+    <lastmod>2026-02-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Статья: Методика расчёта МОН РК -->
+  <url>
+    <loc>https://bilimcalc.vercel.app/metodika-rascheta-mon-rk</loc>
+    <lastmod>2026-02-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
 </urlset>

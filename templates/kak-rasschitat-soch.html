@@ -1,0 +1,325 @@
+{#
+    kak-rasschitat-soch.html — СТРАНИЦА-СТАТЬЯ "/kak-rasschitat-soch"
+    ==================================================================
+
+    КАК ЧИТАТЬ ЭТОТ ФАЙЛ:
+    Всё что в {% ... %} или {{ ... }} — это Jinja2 (язык шаблонов Flask).
+    Всё остальное — обычный HTML который ты уже знаешь.
+
+    {% extends "base.html" %}   → "я наследую base.html"
+    {% block ИМЯ %} ... {% endblock %}  → "заполняю дырку с именем ИМЯ"
+
+    Чтобы сделать новую страницу (например /kak-rasschitat-sor):
+    1. Скопируй этот файл
+    2. Поменяй все блоки meta_ и og_ на нужные тексты
+    3. Поменяй canonical URL
+    4. Поменяй schema_extra (даты, заголовок статьи)
+    5. Поменяй breadcrumb (хлебные крошки)
+    6. Напиши свой контент внутри {% block content %}
+    7. Активируй нужный пункт в nav (убери nav_soch, добавь nav_sor)
+#}
+
+{% extends "base.html" %}
+
+
+{# ══════════════════════════════════════════
+   SEO-БЛОКИ — самое важное для поиска
+   ══════════════════════════════════════════ #}
+
+{# Заголовок вкладки браузера и заголовок в Google #}
+{% block meta_title %}Как рассчитать СОЧ в школе Казахстана — формула и пример | BilimCalc{% endblock %}
+
+{# Описание под заголовком в результатах поиска (160 символов макс) #}
+{% block meta_desc %}Узнайте как рассчитать СОЧ — суммативное оценивание за четверть. Формула расчёта, пример с числами, официальная методика МОН РК. Проверьте свой результат онлайн.{% endblock %}
+
+{# Canonical — говорит Google: "это главная версия этой страницы" #}
+{% block canonical %}https://bilimcalc.vercel.app/kak-rasschitat-soch{% endblock %}
+
+{# Для соцсетей #}
+{% block og_type %}article{% endblock %}
+{% block og_title %}Как рассчитать СОЧ — формула, пример, методика МОН РК{% endblock %}
+{% block og_desc %}Полное руководство по расчёту суммативного оценивания за четверть для школ Казахстана.{% endblock %}
+{% block og_url %}https://bilimcalc.vercel.app/kak-rasschitat-soch{% endblock %}
+
+{# Подсветить пункт СОЧ в навигации #}
+{% block nav_soch %}active{% endblock %}
+
+
+{# ══════════════════════════════════════════
+   МИКРОРАЗМЕТКА — помогает Google понять
+   структуру страницы и показать расширенный
+   сниппет (дату, автора, хлебные крошки)
+   ══════════════════════════════════════════ #}
+{% block schema_extra %}
+
+{# Article schema — Google видит это как статью с автором и датой #}
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "Как рассчитать СОЧ в школе Казахстана",
+    "description": "Формула расчёта суммативного оценивания за четверть, пример с числами, официальная методика МОН РК",
+    "url": "https://bilimcalc.vercel.app/kak-rasschitat-soch",
+    "datePublished": "2025-09-01",
+    "dateModified": "2026-02-01",
+    "inLanguage": "ru",
+    "author": {
+        "@type": "Person",
+        "name": "Anton",
+        "url": "https://github.com/antonbogdan165"
+    },
+    "publisher": {
+        "@type": "Organization",
+        "name": "BilimCalc",
+        "logo": {
+            "@type": "ImageObject",
+            "url": "https://bilimcalc.vercel.app/static/icons/favicon-32x32.png"
+        }
+    },
+    "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "https://bilimcalc.vercel.app/kak-rasschitat-soch"
+    }
+}
+</script>
+
+{# BreadcrumbList schema — хлебные крошки в результатах Google #}
+{# Выглядит так: bilimcalc.vercel.app › Как рассчитать СОЧ #}
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+        {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Главная",
+            "item": "https://bilimcalc.vercel.app/"
+        },
+        {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "Как рассчитать СОЧ",
+            "item": "https://bilimcalc.vercel.app/kak-rasschitat-soch"
+        }
+    ]
+}
+</script>
+
+{% endblock %}
+
+
+{# ══════════════════════════════════════════
+   КОНТЕНТ СТРАНИЦЫ
+   ══════════════════════════════════════════ #}
+{% block content %}
+
+{# Контейнер статьи #}
+<div class="article-wrap">
+
+    {# ── Хлебные крошки (визуальные, не только schema) ── #}
+    {# Важно для UX и тоже помогает SEO #}
+    <nav class="breadcrumb" aria-label="Хлебные крошки">
+        <a href="/">Главная</a>
+        <span class="breadcrumb__sep" aria-hidden="true">›</span>
+        <span aria-current="page">Как рассчитать СОЧ</span>
+    </nav>
+
+    {# ── Основной контент — две колонки на десктопе ── #}
+    <div class="article-layout">
+
+        {# ── ЛЕВАЯ КОЛОНКА: статья ── #}
+        <article class="article" itemscope itemtype="https://schema.org/Article">
+
+            {# Заголовок H1 — должен быть ОДИН на странице и содержать ключевое слово #}
+            <h1 class="article__title" itemprop="headline">
+                Как рассчитать СОЧ: формула, пример и методика МОН РК
+            </h1>
+
+            {# Мета-строка статьи: дата и время чтения #}
+            <div class="article__meta">
+                <time datetime="2026-02-01" itemprop="dateModified">Обновлено: февраль 2026</time>
+                <span class="article__meta-sep">·</span>
+                <span>5 мин чтения</span>
+            </div>
+
+            <p class="article__lead">
+                СОЧ — суммативное оценивание за четверть — это итоговая контрольная работа,
+                которая составляет <strong>50% итоговой оценки</strong> за четверть. Именно поэтому
+                правильный расчёт СОЧ так важен для каждого ученика казахстанской школы.
+            </p>
+
+            <h2>Что такое СОЧ</h2>
+            <p>
+            СОЧ — это суммативное оценивание за четверть, которое помогает определить, насколько хорошо ты усвоил материал за определённый период. Оно проводится по всем основным предметам: математике, языкам, обществознанию и другим. Методика МОН РК требует, чтобы СОЧ отражало твои знания и навыки, полученные за четверть. Обычно СОЧ проводится в конце каждой четверти и является важной частью итоговой оценки за четверть.
+            Основная цель СОЧ — проверить не отдельные темы, а весь объём изученного материала. Для учителей это инструмент объективной оценки, а для тебя — шанс увидеть, что нужно повторить. Используя **калькулятор СОЧ онлайн**, можно быстро узнать, как твои баллы влияют на итоговую оценку за четверть. Так ты сможешь заранее планировать подготовку и исправлять ошибки.
+
+            </p>
+
+            <h2>Формула расчёта СОЧ</h2>
+            <p>
+            СОЧ рассчитывается просто: твои набранные баллы делятся на максимальные, а результат умножается на 50. Почему именно 50? Потому что СОЧ весит половину итоговой оценки за четверть. Это значит, что даже если другие оценки хорошие, слабая СОЧ может сильно повлиять на итоговую оценку.
+            Важно понимать, что правильный расчёт позволяет видеть реальные успехи и слабые места. Используя **калькулятор СОЧ онлайн**, ты сможешь без ошибок вычислить свой результат и понять, над чем ещё стоит поработать.
+            </p>
+
+            {# Блок с формулой — выделен визуально #}
+            <div class="article__formula">
+                <div class="article__formula-title">Формула СОЧ</div>
+                <div class="article__formula-body">
+                    СОЧ (в итоговой оценке) = (Набранные баллы ÷ Максимальные баллы) × 50
+                </div>
+            </div>
+
+            <h2>Пример расчёта</h2>
+            <p>
+                Допустим, ты набрал 18 баллов из 25 возможных за СОЧ. Это пример показывает, как легко переводить баллы в процентный результат. С помощью **калькулятора СОЧ онлайн** ты сразу увидишь, сколько это в итоговой оценке за четверть. Такой подход помогает быстро оценить свои силы и спланировать подготовку к следующему оцениванию.
+            </p>
+
+            {# Блок с примером — таблица #}
+            <div class="article__example">
+                <table class="article__table">
+                    <thead>
+                        <tr>
+                            <th>Параметр</th>
+                            <th>Значение</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Набрано баллов</td>
+                            <td>18</td>
+                        </tr>
+                        <tr>
+                            <td>Максимум</td>
+                            <td>25</td>
+                        </tr>
+                        <tr>
+                            <td>Процент</td>
+                            <td>18 ÷ 25 × 100 = 72%</td>
+                        </tr>
+                        <tr class="article__table-result">
+                            <td><strong>Вклад в итоговую оценку</strong></td>
+                            <td><strong>72% × 0.5 = 36 из 50</strong></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h2>Сколько весит СОЧ в итоговой оценке</h2>
+            <p>
+                Итоговая оценка за четверть состоит из трёх частей: СО 25%, СОР 25% и СОЧ 50%. Это значит, что СОЧ — самая важная часть, от которой зависит половина твоей оценки. Если СОЧ не проводилось, то система пересчитывается: доля других оценок увеличивается, чтобы сохранить 100% итоговой оценки за четверть.
+                Учти, что успешная СОЧ сильно повышает твой общий результат. Используя **методику МОН РК**, учителя оценивают СОЧ максимально объективно. Для тебя это сигнал, что подготовка к СОЧ — ключ к хорошей итоговой оценке.
+            </p>
+
+            {# Блок с весами компонентов #}
+            <div class="article__weights">
+                <div class="article__weight-item">
+                    <div class="article__weight-label">СО</div>
+                    <div class="article__weight-bar">
+                        <div class="article__weight-fill" style="width: 25%; background: var(--accent)"></div>
+                    </div>
+                    <div class="article__weight-pct">25%</div>
+                </div>
+                <div class="article__weight-item">
+                    <div class="article__weight-label">СОР</div>
+                    <div class="article__weight-bar">
+                        <div class="article__weight-fill" style="width: 25%; background: var(--warning)"></div>
+                    </div>
+                    <div class="article__weight-pct">25%</div>
+                </div>
+                <div class="article__weight-item">
+                    <div class="article__weight-label">СОЧ</div>
+                    <div class="article__weight-bar">
+                        <div class="article__weight-fill" style="width: 50%; background: var(--success)"></div>
+                    </div>
+                    <div class="article__weight-pct">50%</div>
+                </div>
+            </div>
+
+            <h2>Как повысить оценку за СОЧ</h2>
+            <p>
+                Чтобы улучшить результат за СОЧ, начни с повторения тем, которые вызывают трудности. Разбивай материал на блоки и проверяй себя с помощью тестов или домашних заданий. Работай с критериями оценивания, которые дают учителя: так ты точно знаешь, на что обратить внимание.
+                Практика — ещё один способ поднять баллы. Попробуй решить несколько вариантов заданий по каждой теме, чтобы быть уверенным в своих знаниях. Наконец, используй **калькулятор СОЧ онлайн**, чтобы понять, сколько баллов нужно набрать для желаемой итоговой оценки за четверть. Если подготовка системная, твоя СОЧ станет сильной стороной и улучшит общий результат.
+            </p>
+
+            <h2>Часто задаваемые вопросы</h2>
+
+            <h3>Можно ли пересдать СОЧ?</h3>
+            <p>Если у тебя не получилось набрать нужные баллы, пересдача возможна только по правилам школы. Обычно это делается с разрешения учителя и при уважительной причине. Следи за объявлениями и готовься заранее, чтобы результат пересдачи был лучше.</p>
+
+            <h3>Когда проводится СОЧ?</h3>
+            <p>СОЧ проходит в конце каждой четверти. Иногда учителя назначают промежуточные тесты, но официальная СОЧ фиксируется для итоговой оценки. Проверяй расписание в школе, чтобы не пропустить важный день.</p>
+
+            <h3>Что делать если пропустил СОЧ по болезни?</h3>
+            <p>Если ты пропустил СОЧ, нужно сразу сообщить учителю. Обычно назначается индивидуальная сдача или перенос оценки. Важно не откладывать, чтобы итоговая оценка за четверть была рассчитана корректно.</p>
+
+            {# ── Блок внутренней перелинковки ── #}
+            {# ВАЖНО для SEO: связываем страницы между собой #}
+            <div class="article__related">
+                <div class="article__related-title">Читайте также</div>
+                <div class="article__related-links">
+                    <a href="/kak-rasschitat-sor" class="article__related-card">
+                        <span class="article__related-label">Статья</span>
+                        <span class="article__related-text">Как рассчитать СОР — полное руководство</span>
+                        <span class="article__related-arrow">→</span>
+                    </a>
+                    <a href="/kak-rasschitat-so" class="article__related-card">
+                        <span class="article__related-label">Статья</span>
+                        <span class="article__related-text">Что такое СО и как считается</span>
+                        <span class="article__related-arrow">→</span>
+                    </a>
+                    <a href="/itogovaya-ocenka-za-chetvert" class="article__related-card">
+                        <span class="article__related-label">Статья</span>
+                        <span class="article__related-text">Итоговая оценка за четверть: полный расчёт</span>
+                        <span class="article__related-arrow">→</span>
+                    </a>
+                    <a href="/metodika-rascheta-mon-rk" class="article__related-card">
+                        <span class="article__related-label">Статья</span>
+                        <span class="article__related-text">Официальная методика расчёта МОН РК</span>
+                        <span class="article__related-arrow">→</span>
+                    </a>
+                </div>
+            </div>
+
+        </article>
+
+        {# ── ПРАВАЯ КОЛОНКА: виджеты ── #}
+        <aside class="article-sidebar">
+
+            {# Виджет: CTA на калькулятор — самый важный #}
+            <div class="sidebar-widget sidebar-widget--cta">
+                <div class="sidebar-widget__title">Рассчитать онлайн</div>
+                <p class="sidebar-widget__text">
+                    Введи свои баллы за СОЧ, СОР и СО — калькулятор мгновенно покажет итоговую оценку
+                </p>
+                <a href="/" class="btn sidebar-widget__btn">
+                    Открыть калькулятор →
+                </a>
+            </div>
+
+            {# Виджет: быстрая шпаргалка #}
+            <div class="sidebar-widget">
+                <div class="sidebar-widget__title">Формула кратко</div>
+                <div class="sidebar-widget__formula">
+                    (Баллы ÷ Макс) × 50
+                </div>
+                <div class="sidebar-widget__note">СОЧ = 50% итоговой оценки</div>
+            </div>
+
+            {# Виджет: навигация по статьям #}
+            <div class="sidebar-widget">
+                <div class="sidebar-widget__title">Другие статьи</div>
+                <nav class="sidebar-nav">
+                    <a href="/kak-rasschitat-so"  class="sidebar-nav__link">→ Как рассчитать СО</a>
+                    <a href="/kak-rasschitat-sor" class="sidebar-nav__link">→ Как рассчитать СОР</a>
+                    <a href="/itogovaya-ocenka-za-chetvert" class="sidebar-nav__link">→ Итоговая оценка</a>
+                    <a href="/metodika-rascheta-mon-rk" class="sidebar-nav__link">→ Методика МОН РК</a>
+                </nav>
+            </div>
+
+        </aside>
+
+    </div>{# /article-layout #}
+</div>{# /article-wrap #}
+
+{% endblock %}

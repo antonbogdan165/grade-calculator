@@ -1,0 +1,301 @@
+{#
+    kak-rasschitat-so.html — СТРАНИЦА-СТАТЬЯ "/kak-rasschitat-so"
+    ==================================================================
+
+    КАК ЧИТАТЬ ЭТОТ ФАЙЛ:
+    Всё что в {% ... %} или {{ ... }} — это Jinja2 (язык шаблонов Flask).
+    Всё остальное — обычный HTML который ты уже знаешь.
+
+    {% extends "base.html" %}   → "я наследую base.html"
+    {% block ИМЯ %} ... {% endblock %}  → "заполняю дырку с именем ИМЯ"
+
+    Чтобы сделать новую страницу (например /kak-rasschitat-sor):
+    1. Скопируй этот файл
+    2. Поменяй все блоки meta_ и og_ на нужные тексты
+    3. Поменяй canonical URL
+    4. Поменяй schema_extra (даты, заголовок статьи)
+    5. Поменяй breadcrumb (хлебные крошки)
+    6. Напиши свой контент внутри {% block content %}
+    7. Активируй нужный пункт в nav (убери nav_so, добавь nav_sor)
+#}
+
+{% extends "base.html" %}
+
+
+{# ══════════════════════════════════════════
+   SEO-БЛОКИ — самое важное для поиска
+   ══════════════════════════════════════════ #}
+
+{# Заголовок вкладки браузера и заголовок в Google #}
+{% block meta_title %}Как рассчитать СО в школе Казахстана — формула и пример | BilimCalc{% endblock %}
+
+{# Описание под заголовком в результатах поиска (160 символов макс) #}
+{% block meta_desc %}Узнайте как рассчитать СО — суммативное оценивание. Формула расчёта, пример с числами, официальная методика МОН РК. Проверьте свой результат онлайн.{% endblock %}
+
+{# Canonical — говорит Google: "это главная версия этой страницы" #}
+{% block canonical %}https://bilimcalc.vercel.app/kak-rasschitat-so{% endblock %}
+
+{# Для соцсетей #}
+{% block og_type %}article{% endblock %}
+{% block og_title %}Как рассчитать СО — формула, пример, методика МОН РК{% endblock %}
+{% block og_desc %}Полное руководство по расчёту суммативного оценивания для школ Казахстана.{% endblock %}
+{% block og_url %}https://bilimcalc.vercel.app/kak-rasschitat-so{% endblock %}
+
+{# Подсветить пункт СО в навигации #}
+{% block nav_so %}active{% endblock %}
+
+
+{# ══════════════════════════════════════════
+   МИКРОРАЗМЕТКА — помогает Google понять
+   структуру страницы и показать расширенный
+   сниппет (дату, автора, хлебные крошки)
+   ══════════════════════════════════════════ #}
+{% block schema_extra %}
+
+{# Article schema — Google видит это как статью с автором и датой #}
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "Как рассчитать СО в школе Казахстана",
+    "description": "Формула расчёта суммативного оценивания, пример с числами, официальная методика МОН РК",
+    "url": "https://bilimcalc.vercel.app/kak-rasschitat-so",
+    "datePublished": "2025-09-01",
+    "dateModified": "2026-02-01",
+    "inLanguage": "ru",
+    "author": {
+        "@type": "Person",
+        "name": "Anton",
+        "url": "https://github.com/antonbogdan165"
+    },
+    "publisher": {
+        "@type": "Organization",
+        "name": "BilimCalc",
+        "logo": {
+            "@type": "ImageObject",
+            "url": "https://bilimcalc.vercel.app/static/icons/favicon-32x32.png"
+        }
+    },
+    "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "https://bilimcalc.vercel.app/kak-rasschitat-so"
+    }
+}
+</script>
+
+{# BreadcrumbList schema — хлебные крошки в результатах Google #}
+{# Выглядит так: bilimcalc.vercel.app › Как рассчитать СО #}
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+        {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Главная",
+            "item": "https://bilimcalc.vercel.app/"
+        },
+        {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "Как рассчитать СО",
+            "item": "https://bilimcalc.vercel.app/kak-rasschitat-so"
+        }
+    ]
+}
+</script>
+
+{% endblock %}
+
+
+{# ══════════════════════════════════════════
+   КОНТЕНТ СТРАНИЦЫ
+   ══════════════════════════════════════════ #}
+{% block content %}
+
+{# Контейнер статьи #}
+<div class="article-wrap">
+
+    {# ── Хлебные крошки (визуальные, не только schema) ── #}
+    {# Важно для UX и тоже помогает SEO #}
+    <nav class="breadcrumb" aria-label="Хлебные крошки">
+        <a href="/">Главная</a>
+        <span class="breadcrumb__sep" aria-hidden="true">›</span>
+        <span aria-current="page">Как рассчитать СО</span>
+    </nav>
+
+    {# ── Основной контент — две колонки на десктопе ── #}
+    <div class="article-layout">
+
+        {# ── ЛЕВАЯ КОЛОНКА: статья ── #}
+        <article class="article" itemscope itemtype="https://schema.org/Article">
+
+            {# Заголовок H1 — должен быть ОДИН на странице и содержать ключевое слово #}
+            <h1 class="article__title" itemprop="headline">
+                Как рассчитать СО: формула, пример и методика МОН РК
+            </h1>
+
+            {# Мета-строка статьи: дата и время чтения #}
+            <div class="article__meta">
+                <time datetime="2026-02-01" itemprop="dateModified">Обновлено: февраль 2026</time>
+                <span class="article__meta-sep">·</span>
+                <span>6 мин чтения</span>
+            </div>
+
+            <p class="article__lead">
+                СО — суммативное оценивание — это итоговая контрольная работа,
+                которая составляет <strong>25% итоговой оценки</strong> за четверть. Именно поэтому
+                правильный расчёт СО так важен для каждого ученика казахстанской школы.
+            </p>
+
+            <h2>Что такое СО</h2>
+            <p>
+                СО — это суммативное оценивание, которое показывает, как ты усвоил тему или раздел. В школах Казахстана его часто называют «формативные оценки», хотя по методике МОН РК это именно СО. Такие оценки ставят после контрольных, тестов, проектов и проверочных работ.
+                СО оценка выставляется по шкале 1–10, где 1 — минимальный результат, а 10 — максимальный. Обычно за одну тему или раздел ты получаешь одну или несколько СО. Они накапливаются в течение четверти и напрямую влияют на итог.
+                Важно понимать, что формативные оценки Казахстан использует не для наказания, а для отслеживания прогресса. Учитель смотрит, где ты «просел», а где всё получается хорошо. Чтобы не гадать, как это отражается на баллах, удобно использовать калькулятор СО онлайн.
+            </p>
+
+            <h2>Формула расчёта СО</h2>
+            <p>
+                СО занимает 25% итоговой оценки за четверть, и это фиксированный вес. Остальные проценты приходятся на СОР и СО, но именно СО ты получаешь чаще всего. Поэтому даже обычные контрольные имеют значение.
+                Формула расчёта простая: берётся среднее арифметическое всех СО, затем оно делится на 10 и умножается на 25. То есть: среднее СО / 10 × 25. В итоге ты получаешь вклад СО в четвертную оценку в процентах.
+                Например, если средний балл по СО равен 8, то вклад будет 8 / 10 × 25 = 20%. Эти проценты прибавляются к остальным частям оценки. Именно так работает методика МОН РК.
+            </p>
+
+            {# Блок с формулой — выделен визуально #}
+            <div class="article__formula">
+                <div class="article__formula-title">Формула СО</div>
+                <div class="article__formula-body">
+                    СО (в итоговой оценке) = (Сумма всех СО ÷ Кол-во СО) × 2.5
+                </div>
+            </div>
+
+            <h2>Пример расчёта</h2>
+            <p>
+                Представь, что за четверть у тебя пять СО: 7, 8, 9, 6 и 8. Складываем оценки и делим на их количество — среднее равно 7,6.
+                Теперь считаем вклад: 7,6 / 10 × 25 = 19%. Эти 19% идут в итоговую оценку за четверть. Если хочешь проверить расчёты быстрее, используй калькулятор СОЧ онлайн — он исключает ошибки.
+            </p>
+
+
+            <h2>Сколько весит СО в итоговой оценке</h2>
+            <p>
+                Многие думают, что одна маленькая СО оценка ничего не решает. На самом деле каждая низкая оценка тянет среднее вниз. Даже одна «двойка» или «тройка» может заметно испортить итог.
+                Формативные оценки Казахстан накапливает весь учебный период. Их нельзя просто «убрать» или проигнорировать. Если в начале четверти оценки слабые, потом приходится сильно напрягаться.
+                СО влияет на итоговую оценку за четверть так же стабильно, как фундамент влияет на дом. Чем он слабее, тем сложнее получить высокий результат. Поэтому лучше держать уровень с самого начала.
+            </p>
+
+            {# Блок с весами компонентов #}
+            <div class="article__weights">
+                <div class="article__weight-item">
+                    <div class="article__weight-label">СО</div>
+                    <div class="article__weight-bar">
+                        <div class="article__weight-fill" style="width: 25%; background: var(--accent)"></div>
+                    </div>
+                    <div class="article__weight-pct">25%</div>
+                </div>
+                <div class="article__weight-item">
+                    <div class="article__weight-label">СОР</div>
+                    <div class="article__weight-bar">
+                        <div class="article__weight-fill" style="width: 25%; background: var(--warning)"></div>
+                    </div>
+                    <div class="article__weight-pct">25%</div>
+                </div>
+                <div class="article__weight-item">
+                    <div class="article__weight-label">СОЧ</div>
+                    <div class="article__weight-bar">
+                        <div class="article__weight-fill" style="width: 50%; background: var(--success)"></div>
+                    </div>
+                    <div class="article__weight-pct">50%</div>
+                </div>
+            </div>
+
+            <h2>Как повысить оценку за СО</h2>
+            <p>
+                Первое — относись к каждой проверочной как к важной. Даже маленький тест может стать СО и пойти в расчёт. Не пропускай работы без уважительной причины.
+                Второе — спрашивай учителя, за что снижен балл. Часто можно понять ошибку и больше её не повторять. Это напрямую помогает поднять средний результат.
+                Третье — следи за оценками самостоятельно. Записывай их и считай среднее раз в неделю через калькулятор СОЧ онлайн. Так ты заранее увидишь, какая итоговая оценка за четверть может получиться.
+                И главное — не откладывай всё на конец четверти. По методике МОН РК стабильные результаты ценятся выше, чем один удачный рывок в конце.
+            </p>
+
+            <h2>Часто задаваемые вопросы</h2>
+
+            <h3>Можно ли пересдать СО?</h3>
+            <p>Чаще всего пересдача СО не предусмотрена. Формативные оценки Казахстан использует как фиксацию результата на конкретный момент. В редких случаях учитель может дать дополнительное задание, но это его решение. Поэтому лучше сразу писать работы на максимум.</p>
+
+            <h3>Сколько СО ставится за четверть?</h3>
+            <p>Точного количества нет, всё зависит от предмета и программы. Обычно это 12–16 СО за четверть, иногда больше. Учитель ставит СО после завершения тем или разделов. Все они учитываются при расчёте среднего балла и влияют на итоговую оценку за четверть.</p>
+
+            <h3>Как СО влияет на итоговую оценку?</h3>
+            <p>СО даёт 25% от всей четвертной оценки. Даже если хорошо написаны СОР и СОЧ, слабые СО могут снизить итог. Именно поэтому СО оценка так важна. Чтобы понять влияние заранее, удобно считать всё через калькулятор СОЧ онлайн.</p>
+
+            {# ── Блок внутренней перелинковки ── #}
+            {# ВАЖНО для SEO: связываем страницы между собой #}
+            <div class="article__related">
+                <div class="article__related-title">Читайте также</div>
+                <div class="article__related-links">
+                    <a href="/kak-rasschitat-sor" class="article__related-card">
+                        <span class="article__related-label">Статья</span>
+                        <span class="article__related-text">Как рассчитать СОР — полное руководство</span>
+                        <span class="article__related-arrow">→</span>
+                    </a>
+                    <a href="/kak-rasschitat-soch" class="article__related-card">
+                        <span class="article__related-label">Статья</span>
+                        <span class="article__related-text">Что такое СОЧ и как считается</span>
+                        <span class="article__related-arrow">→</span>
+                    </a>
+                    <a href="/itogovaya-ocenka-za-chetvert" class="article__related-card">
+                        <span class="article__related-label">Статья</span>
+                        <span class="article__related-text">Итоговая оценка за четверть: полный расчёт</span>
+                        <span class="article__related-arrow">→</span>
+                    </a>
+                    <a href="/metodika-rascheta-mon-rk" class="article__related-card">
+                        <span class="article__related-label">Статья</span>
+                        <span class="article__related-text">Официальная методика расчёта МОН РК</span>
+                        <span class="article__related-arrow">→</span>
+                    </a>
+                </div>
+            </div>
+
+        </article>
+
+        {# ── ПРАВАЯ КОЛОНКА: виджеты ── #}
+        <aside class="article-sidebar">
+
+            {# Виджет: CTA на калькулятор — самый важный #}
+            <div class="sidebar-widget sidebar-widget--cta">
+                <div class="sidebar-widget__title">Рассчитать онлайн</div>
+                <p class="sidebar-widget__text">
+                    Введи свои баллы за СОЧ, СОР и СО — калькулятор мгновенно покажет итоговую оценку
+                </p>
+                <a href="/" class="btn sidebar-widget__btn">
+                    Открыть калькулятор →
+                </a>
+            </div>
+
+            {# Виджет: быстрая шпаргалка #}
+            <div class="sidebar-widget">
+                <div class="sidebar-widget__title">Формула кратко</div>
+                <div class="sidebar-widget__formula">
+                    (Сумма всех СО ÷ Кол-во СО) × 2.5
+                </div>
+                <div class="sidebar-widget__note">СО = 25% итоговой оценки</div>
+            </div>
+
+            {# Виджет: навигация по статьям #}
+            <div class="sidebar-widget">
+                <div class="sidebar-widget__title">Другие статьи</div>
+                <nav class="sidebar-nav">
+                    <a href="/kak-rasschitat-sor"  class="sidebar-nav__link">→ Как рассчитать СОР</a>
+                    <a href="/kak-rasschitat-soch" class="sidebar-nav__link">→ Как рассчитать СОЧ</a>
+                    <a href="/itogovaya-ocenka-za-chetvert" class="sidebar-nav__link">→ Итоговая оценка</a>
+                    <a href="/metodika-rascheta-mon-rk" class="sidebar-nav__link">→ Методика МОН РК</a>
+                </nav>
+            </div>
+
+        </aside>
+
+    </div>{# /article-layout #}
+</div>{# /article-wrap #}
+
+{% endblock %}
