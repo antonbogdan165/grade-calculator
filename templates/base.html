@@ -1,43 +1,23 @@
 {#
     base.html — РОДИТЕЛЬСКИЙ ШАБЛОН
-    ================================
-    Все страницы сайта наследуются от этого файла через:
-        {% extends "base.html" %}
-
-    Блоки ({% block ... %}) — это "дырки" которые дочерние
-    страницы заполняют своим содержимым.
-
-    Блоки которые НУЖНО переопределять в каждой странице:
-        - meta_title       → <title> страницы
-        - meta_desc        → meta description
-        - canonical        → canonical URL страницы
-        - og_title         → заголовок для соцсетей
-        - og_url           → URL для соцсетей
-        - schema_extra     → доп. JSON-LD разметка (Article, Breadcrumb и т.д.)
-        - content          → ВЕСЬ контент страницы (между header и footer)
-
-    Блоки которые МОЖНО переопределять (необязательно):
-        - extra_css        → доп. стили только для этой страницы
-        - extra_js         → доп. скрипты только для этой страницы
+    Все страницы сайта наследуются от этого файла.
 #}
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="ru" data-theme="dark">
 <head>
-    {# ── Базовые мета-теги (одинаковые на всех страницах) ── #}
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
     <meta name="robots" content="index, follow">
     <meta name="language" content="ru">
     <meta http-equiv="content-language" content="ru">
 
-    {# ── Заголовок и описание — каждая страница задаёт своё ── #}
+    {# theme.js ПЕРВЫМ — применяет тему до рендера, без мигания #}
+    <script src="/static/js/theme.js"></script>
+
     <title>{% block meta_title %}BilimCalc — калькулятор СО, СОР и СОЧ онлайн{% endblock %}</title>
     <meta name="description" content="{% block meta_desc %}Онлайн калькулятор СО, СОР и СОЧ для школ Казахстана. Быстрый расчёт итоговой оценки за четверть. Бесплатно и без регистрации.{% endblock %}">
-
-    {# ── Canonical — предотвращает дублирование контента в поиске ── #}
     <link rel="canonical" href="{% block canonical %}https://bilimcalc.vercel.app/{% endblock %}">
 
-    {# ── Open Graph (превью при шаринге в Telegram, VK, WhatsApp) ── #}
     <meta property="og:type"        content="{% block og_type %}website{% endblock %}">
     <meta property="og:locale"      content="ru_RU">
     <meta property="og:site_name"   content="BilimCalc">
@@ -47,12 +27,9 @@
     <meta property="og:image"       content="https://bilimcalc.vercel.app/static/icons/preview.png">
     <meta property="og:image:width"  content="1200">
     <meta property="og:image:height" content="630">
-
-    {# ── Twitter Card ── #}
     <meta name="twitter:card"  content="summary_large_image">
     <meta name="twitter:image" content="https://bilimcalc.vercel.app/static/icons/preview.png">
 
-    {# ── Иконки и PWA ── #}
     <link rel="icon" type="image/png" sizes="32x32" href="/static/icons/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="/static/icons/favicon-16x16.png">
     <link rel="apple-touch-icon" href="/static/icons/apple-touch-icon.png">
@@ -61,14 +38,10 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 
-    {# ── Стили ── #}
-    <link rel="stylesheet" href="/static/css/style.css?v=1.2.0">
-    <link rel="stylesheet" href="/static/css/article.css?v=1.0.0">
-
-    {# ── Доп. стили для конкретной страницы (необязательно) ── #}
+    <link rel="stylesheet" href="/static/css/style.css?v=1.4.0">
+    <link rel="stylesheet" href="/static/css/article.css?v=1.1.0">
     {% block extra_css %}{% endblock %}
 
-    {# ── Базовая JSON-LD разметка (одинаковая для всех) ── #}
     <script type="application/ld+json">
     {
         "@context": "https://schema.org",
@@ -78,7 +51,6 @@
         "logo": "https://bilimcalc.vercel.app/static/icons/favicon-32x32.png"
     }
     </script>
-
     <script type="application/ld+json">
     {
         "@context": "https://schema.org",
@@ -89,41 +61,25 @@
         "url": "https://bilimcalc.vercel.app/",
         "description": "Онлайн-калькулятор для расчёта итоговой оценки по системе СО, СОР и СОЧ в школах Казахстана",
         "inLanguage": "ru",
-        "offers": {
-            "@type": "Offer",
-            "price": "0",
-            "priceCurrency": "KZT"
-        },
-        "aggregateRating": {
-            "@type": "AggregateRating",
-            "ratingValue": "4.9",
-            "reviewCount": "128"
-        }
+        "offers": { "@type": "Offer", "price": "0", "priceCurrency": "KZT" },
+        "aggregateRating": { "@type": "AggregateRating", "ratingValue": "4.9", "reviewCount": "128" }
     }
     </script>
-
-    {# ── Доп. JSON-LD для конкретной страницы (Article, Breadcrumb и т.д.) ── #}
     {% block schema_extra %}{% endblock %}
 
-    {# ── Google Analytics 4 — вставь свой Measurement ID ── #}
-    {# <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-7S9C0KT928"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
         function gtag(){dataLayer.push(arguments);}
         gtag('js', new Date());
         gtag('config', 'G-7S9C0KT928');
-    </script> #}
-
+    </script>
     <link rel="preconnect" href="https://cdn.jsdelivr.net">
 </head>
 <body>
 
-{# ════════════════════════════════════════════
-   ШАПКА САЙТА — одинаковая на всех страницах
-   ════════════════════════════════════════════ #}
 <header class="site-header">
     <div class="site-header__inner">
-        {# Логотип — кликабельный, всегда ведёт на главную #}
         <a href="/" class="site-logo">
             <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" width="22" height="22">
                 <rect x="2" y="2" width="9" height="9" rx="2" fill="#3cb648"/>
@@ -134,7 +90,6 @@
             <span>BilimCalc</span>
         </a>
 
-        {# Навигация #}
         <nav class="site-nav" aria-label="Основная навигация">
             <a href="/" class="site-nav__link {% block nav_home %}{% endblock %}">Калькулятор</a>
             <a href="/kak-rasschitat-so"  class="site-nav__link {% block nav_so %}{% endblock %}">СО</a>
@@ -142,19 +97,18 @@
             <a href="/kak-rasschitat-soch" class="site-nav__link {% block nav_soch %}{% endblock %}">СОЧ</a>
             <a href="/itogovaya-ocenka-za-chetvert" class="site-nav__link {% block nav_itog %}{% endblock %}">Итоговая</a>
         </nav>
+
+        {# Кнопка переключения темы #}
+        <button id="themeBtn" class="theme-btn" onclick="ThemeToggle.toggle()" title="Включить светлую тему">
+            <span id="themeIcon">☀️</span>
+        </button>
     </div>
 </header>
 
-{# ════════════════════════════════════════════
-   ОСНОВНОЙ КОНТЕНТ — каждая страница своё
-   ════════════════════════════════════════════ #}
 <main id="main-content">
     {% block content %}{% endblock %}
 </main>
 
-{# ════════════════════════════════════════════
-   ПОДВАЛ — одинаковый на всех страницах
-   ════════════════════════════════════════════ #}
 <footer class="site-footer">
     <div class="site-footer__inner">
         <div class="site-footer__links">
@@ -174,11 +128,11 @@
     </div>
 </footer>
 
-{# Доп. скрипты для конкретной страницы #}
 {% block extra_js %}{% endblock %}
 
 <script>
     document.getElementById('footer-year').textContent = '© ' + new Date().getFullYear();
+    ThemeToggle.init();
 </script>
 </body>
 </html>

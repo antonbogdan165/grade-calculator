@@ -1,7 +1,8 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="ru" data-theme="dark">
 <head>
     <meta name="robots" content="index, follow">
+    <script src="/static/js/theme.js"></script>
     <link rel="icon" type="image/png" sizes="32x32" href="/static/icons/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="/static/icons/favicon-16x16.png">
     <link rel="apple-touch-icon" href="/static/icons/apple-touch-icon.png">
@@ -88,7 +89,21 @@
 </head>
 <body>
 <div class="container">
-    <h1>BilimCalc — калькулятор итоговой оценки</h1>
+    <div class="site-title" style="position:relative">
+        <button id="themeBtn" class="theme-btn" onclick="ThemeToggle.toggle()" title="Включить светлую тему" style="position:absolute;right:0;top:0">
+            <span id="themeIcon">☀️</span>
+        </button>
+        <div class="site-title__logo">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" width="36" height="36">
+                <rect x="2" y="2" width="9" height="9" rx="2" fill="#3cb648"/>
+                <rect x="13" y="2" width="9" height="9" rx="2" fill="#3cb648"/>
+                <rect x="2" y="13" width="9" height="9" rx="2" fill="#3cb648"/>
+                <path d="M15 18h4M17 16v4" stroke="#3cb648" stroke-width="2.2" stroke-linecap="round"/>
+            </svg>
+            <h1 class="site-title__name">Bilim<span>Calc</span></h1>
+        </div>
+        <div class="site-title__sub">Калькулятор итоговой оценки для школ Казахстана</div>
+    </div>
 
     <div class="grid">
         <!-- левая колонка -->
@@ -270,7 +285,7 @@
 
     <footer>
         <div>Разработчик: Anton · <a href="https://github.com/antonbogdan165" target="_blank">GitHub</a></div>
-        <div style="margin-top:5px;opacity:.6">© <span id="year"></span> BilimCalc · v1.3</div>
+        <div style="margin-top:5px;opacity:.6">© <span id="year"></span> BilimCalc · v1.3.2</div>
     </footer>
 
     <div class="card faq-card" style="margin-top:20px;">

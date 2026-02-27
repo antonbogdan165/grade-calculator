@@ -400,3 +400,92 @@
     .site-header__inner { height: 52px; }
     .site-nav__link { font-size: 12px; padding: 4px 8px; }
 }
+/* ══════════════════════════════════════════════
+   СВЕТЛАЯ ТЕМА — статейные страницы
+   ══════════════════════════════════════════════ */
+[data-theme="light"] .site-header {
+    background: rgba(240,244,248,0.92);
+    border-bottom-color: rgba(0,0,0,0.08);
+}
+[data-theme="light"] .site-logo { color: #0f172a; }
+[data-theme="light"] .site-nav__link { color: #64748b; }
+[data-theme="light"] .site-nav__link:hover { color: #0f172a; background: rgba(0,0,0,0.04); }
+[data-theme="light"] .site-nav__link.active { color: var(--accent); background: rgba(37,99,235,0.07); }
+
+[data-theme="light"] .site-footer { border-top-color: rgba(0,0,0,0.07); }
+[data-theme="light"] .site-footer__links a { color: #64748b; }
+[data-theme="light"] .site-footer__links a:hover { color: var(--accent); }
+[data-theme="light"] .site-footer__copy { color: #94a3b8; }
+
+[data-theme="light"] .breadcrumb { color: #64748b; }
+[data-theme="light"] .breadcrumb a { color: var(--accent); }
+
+[data-theme="light"] .article__title { color: #0f172a; }
+[data-theme="light"] .article__meta { color: #64748b; border-bottom-color: rgba(0,0,0,0.07); }
+[data-theme="light"] .article__lead { color: #334155; }
+[data-theme="light"] .article h2 { color: #0f172a; border-bottom-color: rgba(0,0,0,0.06); }
+[data-theme="light"] .article h3 { color: #1e293b; }
+[data-theme="light"] .article p { color: #475569; }
+[data-theme="light"] .article strong { color: #1e293b; }
+
+[data-theme="light"] .article__formula {
+    background: rgba(37,99,235,0.04);
+    border-color: rgba(37,99,235,0.2);
+}
+[data-theme="light"] .article__formula-body { color: #1e293b; }
+
+[data-theme="light"] .article__table th {
+    background: rgba(0,0,0,0.03);
+    color: #64748b;
+    border-bottom-color: rgba(0,0,0,0.08);
+}
+[data-theme="light"] .article__table td {
+    color: #475569;
+    border-bottom-color: rgba(0,0,0,0.04);
+}
+[data-theme="light"] .article__table-result td {
+    background: rgba(22,163,74,0.06);
+    color: #16a34a;
+    border-top-color: rgba(22,163,74,0.2);
+}
+
+[data-theme="light"] .article__weight-bar { background: rgba(0,0,0,0.07); }
+[data-theme="light"] .article__weight-label { color: #64748b; }
+[data-theme="light"] .article__weight-pct { color: #1e293b; }
+
+[data-theme="light"] .article__related { border-top-color: rgba(0,0,0,0.07); }
+[data-theme="light"] .article__related-title { color: #94a3b8; }
+[data-theme="light"] .article__related-card {
+    background: rgba(0,0,0,0.02);
+    border-color: rgba(0,0,0,0.07);
+}
+[data-theme="light"] .article__related-card:hover {
+    border-color: rgba(37,99,235,0.25);
+    background: rgba(37,99,235,0.04);
+}
+[data-theme="light"] .article__related-text { color: #1e293b; }
+
+[data-theme="light"] .sidebar-widget {
+    background: #ffffff;
+    border-color: rgba(0,0,0,0.08);
+}
+[data-theme="light"] .sidebar-widget--cta {
+    background: rgba(22,163,74,0.04);
+    border-color: rgba(22,163,74,0.25);
+}
+[data-theme="light"] .sidebar-widget__title { color: #94a3b8; }
+[data-theme="light"] .sidebar-widget--cta .sidebar-widget__title { color: #16a34a; }
+[data-theme="light"] .sidebar-widget__text { color: #64748b; }
+[data-theme="light"] .sidebar-widget__formula {
+    color: var(--accent);
+    background: rgba(37,99,235,0.06);
+}
+[data-theme="light"] .sidebar-widget__note { color: #94a3b8; }
+[data-theme="light"] .sidebar-nav__link { color: #64748b; }
+[data-theme="light"] .sidebar-nav__link:hover { color: var(--accent); background: rgba(37,99,235,0.05); }
+
+[data-theme="light"] .mobile-cta {
+    background: rgba(22,163,74,0.06);
+    border-color: rgba(22,163,74,0.2);
+}
+[data-theme="light"] .mobile-cta__title { color: #0f172a; }
