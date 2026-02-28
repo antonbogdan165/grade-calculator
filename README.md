@@ -25,7 +25,14 @@
 ## 🎬 Демонстрация интерфейса
 
 <p align="center">
-  <img src="screenshots/main.mp4" alt="BilimCalc demo" width="800">
+  <video
+    src="screenshots/main.mp4"
+    autoplay
+    loop
+    muted
+    playsinline
+    width="900">
+  </video>
 </p>
 
 ---
