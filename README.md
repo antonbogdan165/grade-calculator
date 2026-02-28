@@ -24,8 +24,9 @@
 
 ## 📸 Интерфейс
 
-![app](screenshots/main.png)
-
+<p align="center">
+  <img src="screenshots/main.gif" alt="BilimCalc demo" width="800">
+</p>
 ---
 
 ## 🚀 Возможности
