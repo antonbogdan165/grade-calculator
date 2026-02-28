@@ -25,7 +25,7 @@
 ## 📸 Интерфейс
 
 <p align="center">
-  <img src="screenshots/main.gif" alt="BilimCalc demo" width="800">
+  <img src="screenshots/main.mp4" alt="BilimCalc demo" width="800">
 </p>
 ---
 
