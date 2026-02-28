@@ -25,13 +25,8 @@
 ## 🎬 Демонстрация интерфейса
 
 <p align="center">
-  <video
-    src="screenshots/main.mp4"
-    autoplay
-    loop
-    muted
-    playsinline
-    width="900">
+  <video autoplay loop muted playsinline width="900" controls>
+    <source src="https://raw.githubusercontent.com/antonbogdan165/grade-calculator/main/screenshots/main.mp4" type="video/mp4">
   </video>
 </p>
 
