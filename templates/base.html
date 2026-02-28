@@ -1,7 +1,3 @@
-{#
-    base.html — РОДИТЕЛЬСКИЙ ШАБЛОН
-    Все страницы сайта наследуются от этого файла.
-#}
 <!DOCTYPE html>
 <html lang="ru" data-theme="dark">
 <head>
@@ -11,7 +7,6 @@
     <meta name="language" content="ru">
     <meta http-equiv="content-language" content="ru">
 
-    {# theme.js ПЕРВЫМ — применяет тему до рендера, без мигания #}
     <script src="/static/js/theme.js"></script>
     <script src="/static/js/page-loader.js"></script>
 
@@ -40,8 +35,8 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 
     <link rel="stylesheet" href="/static/css/style.css?v=1.4.0">
-    <link rel="stylesheet" href="/static/css/article.css?v=1.1.0">
-    <link rel="stylesheet" href="/static/css/page-loader.css?v=1.0.0">
+    <link rel="stylesheet" href="/static/css/article.css?v=1.2.0">
+    <link rel="stylesheet" href="/static/css/page-loader.css?v=1.1.0">
     {% block extra_css %}{% endblock %}
 
     <script type="application/ld+json">
@@ -80,31 +75,42 @@
 </head>
 <body>
 
-<header class="site-header">
-    <div class="site-header__inner">
-        <a href="/" class="site-logo">
-            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" width="22" height="22">
-                <rect x="2" y="2" width="9" height="9" rx="2" fill="#3cb648"/>
-                <rect x="13" y="2" width="9" height="9" rx="2" fill="#3cb648"/>
-                <rect x="2" y="13" width="9" height="9" rx="2" fill="#3cb648"/>
-                <path d="M15 18h4M17 16v4" stroke="#3cb648" stroke-width="2.2" stroke-linecap="round"/>
+<div id="topbar">
+    <a class="topbar-logo" href="/" title="BilimCalc">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" width="22" height="22">
+            <rect x="2" y="2" width="9" height="9" rx="2" fill="#3cb648"/>
+            <rect x="13" y="2" width="9" height="9" rx="2" fill="#3cb648"/>
+            <rect x="2" y="13" width="9" height="9" rx="2" fill="#3cb648"/>
+            <path d="M15 18h4M17 16v4" stroke="#3cb648" stroke-width="2.2" stroke-linecap="round"/>
+        </svg>
+        <span class="topbar-logo__name">Bilim<span>Calc</span></span>
+    </a>
+
+    <div class="topbar-center">
+        <a href="https://help.bilimland.kz/l_RUS/knowledge_base/item/354267"
+           target="_blank" rel="noopener noreferrer" class="topbar-official-link">
+            <span>Официальная методика</span>
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                 stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+                <polyline points="15 3 21 3 21 9"/>
+                <line x1="10" y1="14" x2="21" y2="3"/>
             </svg>
-            <span>BilimCalc</span>
         </a>
 
-        <nav class="site-nav" aria-label="Основная навигация">
-            <a href="/" class="site-nav__link {% block nav_home %}{% endblock %}">Калькулятор</a>
-            <a href="/kak-rasschitat-so"  class="site-nav__link {% block nav_so %}{% endblock %}">СО</a>
-            <a href="/kak-rasschitat-sor" class="site-nav__link {% block nav_sor %}{% endblock %}">СОР</a>
-            <a href="/kak-rasschitat-soch" class="site-nav__link {% block nav_soch %}{% endblock %}">СОЧ</a>
-            <a href="/itogovaya-ocenka-za-chetvert" class="site-nav__link {% block nav_itog %}{% endblock %}">Итоговая</a>
+        <nav class="topbar-nav" aria-label="Основная навигация">
+            <a href="/kak-rasschitat-so"            class="topbar-nav__link {% block nav_so %}{% endblock %}">СО</a>
+            <a href="/kak-rasschitat-sor"           class="topbar-nav__link {% block nav_sor %}{% endblock %}">СОР</a>
+            <a href="/kak-rasschitat-soch"          class="topbar-nav__link {% block nav_soch %}{% endblock %}">СОЧ</a>
+            <a href="/itogovaya-ocenka-za-chetvert" class="topbar-nav__link {% block nav_itog %}{% endblock %}">Итоговая</a>
+            <a href="/metodika-rascheta-mon-rk"     class="topbar-nav__link {% block nav_metodika %}{% endblock %}">МОН РК</a>
         </nav>
-
-        <button id="themeBtn" class="theme-btn" onclick="ThemeToggle.toggle()" title="Переключить тему">
-            <span id="themeIcon">☀️</span>
-        </button>
     </div>
-</header>
+
+    <button id="themeBtn" class="theme-btn" onclick="ThemeToggle.toggle()" title="Переключить тему">
+        <span id="themeIcon">☀️</span>
+    </button>
+</div>
 
 <main id="main-content">
     {% block content %}{% endblock %}
@@ -136,7 +142,6 @@
     ThemeToggle.init();
 </script>
 
-{# ── Мобильный нижний таб-бар (только <600px через CSS) ── #}
 <nav id="mobile-nav" aria-label="Мобильная навигация">
     <a href="/" class="mobile-nav__item {% block mob_home %}{% endblock %}">
         <span class="mobile-nav__icon">🧮</span>
@@ -158,13 +163,16 @@
         <span class="mobile-nav__icon">🏆</span>
         <span>Итоговая</span>
     </a>
+    <a href="/metodika-rascheta-mon-rk" class="mobile-nav__item {% block mob_metodika %}{% endblock %}">
+        <span class="mobile-nav__icon">📋</span>
+        <span>МОН РК</span>
+    </a>
 </nav>
 
-{# ── Ripple-эффект на кнопках и ссылках ── #}
 <script>
 (function(){
     document.addEventListener('click', function(e){
-        const target = e.target.closest('.mobile-nav__item, .btn, .official-link');
+        const target = e.target.closest('.mobile-nav__item, .btn, .topbar-official-link');
         if(!target) return;
         const rect = target.getBoundingClientRect();
         const ripple = document.createElement('span');

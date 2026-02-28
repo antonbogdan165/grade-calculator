@@ -43,6 +43,5 @@ def linear_regression(features, labels, **kwargs):
         "slope": float(slope),
         "intercept": float(intercept),
         "predictions": final_predictions.tolist(),
-        "loss": [],           # нет истории потерь — не используется на фронте
         "accuracy": round(accuracy, 1)
     }

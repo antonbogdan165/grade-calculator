@@ -3,16 +3,14 @@ from .model import linear_regression
 
 
 def analyze_scores(scores):
-
-    features = np.arange(1, len(scores)+1)
-    labels = np.array(scores)
-
-    model = linear_regression(features, labels)
+    x = np.arange(1, len(scores) + 1)
+    y = np.array(scores)
+    model = linear_regression(x, y)
 
     return {
-        "scores": scores,
-        "x": features.tolist(),
+        "scores":      scores,
+        "x":           x.tolist(),
         "predictions": model["predictions"],
-        "accuracy": model["accuracy"],
-        "slope": model["slope"]
+        "accuracy":    model["accuracy"],
+        "slope":       model["slope"],
     }
