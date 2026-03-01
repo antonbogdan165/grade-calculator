@@ -1,5 +1,6 @@
 from flask import Flask, request, jsonify, render_template, send_from_directory, redirect
 import os
+import time
 
 from logics import calculate_parts, calculate_final
 from ml.analyze import analyze_scores
@@ -7,6 +8,7 @@ from ml.analyze import analyze_scores
 
 app = Flask(__name__)
 app.secret_key = os.environ.get("SECRET_KEY", os.urandom(24))
+BUILD_TIME = str(int(time.time()))
 
 
 ARTICLE_ROUTES = {
@@ -37,7 +39,10 @@ def static_from_root():
 
 @app.route("/sw.js")
 def service_worker():
-    response = send_from_directory("static/js", "sw.js")
+    sw_path = os.path.join(app.root_path, "static", "js", "sw.js")
+    with open(sw_path, "r", encoding="utf-8") as f:
+        content = f.read().replace("__BUILD_TIME__", BUILD_TIME)
+    response = app.response_class(response=content, mimetype="application/javascript")
     response.headers["Service-Worker-Allowed"] = "/"
     response.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
     return response
