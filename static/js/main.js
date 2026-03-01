@@ -1,3 +1,8 @@
+/* ═══════════════════════════════════════════════════════
+   BilimCalc — main.js
+   Вся логика расчёта и ML перенесена в JS (работает офлайн)
+   ═══════════════════════════════════════════════════════ */
+
 /* ---------- state ---------- */
 let so = [];
 let sors = [];
@@ -256,7 +261,7 @@ function makeDigitsOnly(input, maxLen, maxVal, onFull) {
     });
 }
 
-const soInput      = document.getElementById("soInput");
+const soInput        = document.getElementById("soInput");
 const sorDialedInput = document.getElementById("sorDialed");
 const sorMaxInput    = document.getElementById("sorMax");
 const sochDialedInput = document.getElementById("sochDialed");
@@ -299,11 +304,94 @@ function animatePercentage(element, start, end, duration = 500) {
     requestAnimationFrame(update);
 }
 
+/* ═══════════════════════════════════════════════════════
+   ЛОГИКА РАСЧЁТА (порт из logics.py — работает офлайн)
+   ═══════════════════════════════════════════════════════ */
+
+function calculateParts(so, sors, soch) {
+    // СО — среднее оценок / 10 * 25
+    let total_so = null;
+    if (so && so.length > 0) {
+        const avg = so.reduce((a, b) => a + b, 0) / so.length;
+        total_so = (avg / 10) * 25;
+    }
+
+    // СОР — среднее процентов * 0.25
+    let total_sor = null;
+    if (sors && sors.length > 0) {
+        const pcts = sors
+            .filter(([, max]) => max > 0)
+            .map(([d, m]) => (d / m) * 100);
+        if (pcts.length > 0) {
+            const avg = pcts.reduce((a, b) => a + b, 0) / pcts.length;
+            total_sor = (avg / 100) * 25;
+        }
+    }
+
+    // СОЧ — процент * 0.50
+    let total_soch = null;
+    if (soch && soch[1] > 0) {
+        total_soch = (soch[0] / soch[1]) * 50;
+    }
+
+    return { total_so, total_sor, total_soch };
+}
+
+function calculateFinal(total_so, total_sor, total_soch) {
+    if (total_so !== null && total_sor !== null && total_soch !== null) {
+        return Math.round((total_so + total_sor + total_soch) * 10000) / 10000;
+    }
+    if (total_so !== null && total_sor !== null) {
+        return Math.round((total_so + total_sor) * 2 * 10000) / 10000;
+    }
+    if (total_so !== null) {
+        return Math.round(total_so * 4 * 10000) / 10000;
+    }
+    return null;
+}
+
+/* ═══════════════════════════════════════════════════════
+   ML АНАЛИЗ (порт из ml/analyze.py и ml/model.py — офлайн)
+   ═══════════════════════════════════════════════════════ */
+
+function linearRegression(scores) {
+    const n = scores.length;
+    const x = Array.from({ length: n }, (_, i) => i + 1);
+    const y = scores;
+
+    const xMean = x.reduce((a, b) => a + b, 0) / n;
+    const yMean = y.reduce((a, b) => a + b, 0) / n;
+
+    let num = 0, den = 0;
+    for (let i = 0; i < n; i++) {
+        num += (x[i] - xMean) * (y[i] - yMean);
+        den += (x[i] - xMean) ** 2;
+    }
+
+    const slope     = den === 0 ? 0 : num / den;
+    const intercept = yMean - slope * xMean;
+
+    const predictions = x.map(xi => xi * slope + intercept);
+
+    // RMSE → accuracy
+    const rmse = Math.sqrt(
+        predictions.reduce((sum, p, i) => sum + (y[i] - p) ** 2, 0) / n
+    );
+    const accuracy = Math.min(100, Math.max(0, 100 - (rmse / 10) * 100));
+
+    return {
+        scores,
+        predictions,
+        accuracy: Math.round(accuracy * 10) / 10,
+        slope,
+    };
+}
+
 /* ---------- calculate ---------- */
-let pending     = false;
+let pending      = false;
 let pendingAgain = false;
 
-async function calculate() {
+function calculate() {
     if (pending) { pendingAgain = true; return; }
     pending      = true;
     pendingAgain = false;
@@ -315,28 +403,25 @@ async function calculate() {
             ? [Number(sochDialed || 0), Number(sochMax)]
             : null;
 
-        const response = await fetch("/calculate", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ so, sors, soch }),
-        });
-        const data = await response.json();
+        // Считаем локально — без сервера
+        const { total_so, total_sor, total_soch } = calculateParts(so, sors, soch);
+        const final_result = calculateFinal(total_so, total_sor, total_soch);
 
         const finalEl = document.getElementById("finalResult");
         const fill    = document.getElementById("progressFill");
         const badge   = document.getElementById("gradeBadge");
 
-        document.getElementById("breakSo").innerText    = data.total_so   !== null ? data.total_so.toFixed(2)   + "%" : "—";
-        document.getElementById("breakSors").innerText  = data.total_sor  !== null ? data.total_sor.toFixed(2)  + "%" : "—";
-        document.getElementById("breakSoch").innerText  = data.total_soch !== null ? data.total_soch.toFixed(2) + "%" : "—";
-        document.getElementById("breakSoDetails").innerText    = "";
-        document.getElementById("breakSorsDetails").innerText  = "";
-        document.getElementById("breakSochDetails").innerText  = "";
+        document.getElementById("breakSo").innerText    = total_so   !== null ? total_so.toFixed(2)   + "%" : "—";
+        document.getElementById("breakSors").innerText  = total_sor  !== null ? total_sor.toFixed(2)  + "%" : "—";
+        document.getElementById("breakSoch").innerText  = total_soch !== null ? total_soch.toFixed(2) + "%" : "—";
+        document.getElementById("breakSoDetails").innerText   = "";
+        document.getElementById("breakSorsDetails").innerText = "";
+        document.getElementById("breakSochDetails").innerText = "";
 
         finalEl.classList.remove("result-danger", "result-warning", "result-good", "result-excellent");
 
-        if (data.final_result !== null && data.final_result !== undefined) {
-            const pct = Number(data.final_result);
+        if (final_result !== null) {
+            const pct = Number(final_result);
             animatePercentage(finalEl, parseFloat(finalEl.innerText) || 0, pct);
             fill.style.width = Math.min(Math.max(pct, 0), 100) + "%";
 
@@ -344,34 +429,34 @@ async function calculate() {
                 finalEl.classList.add("result-danger");
                 fill.style.background = "var(--danger)";
                 chartColor = "#da3633";
-                badge.textContent  = "Неудовлетворительно";
-                badge.className    = "grade-badge badge-danger";
+                badge.textContent = "Неудовлетворительно";
+                badge.className   = "grade-badge badge-danger";
             } else if (pct < 65) {
                 finalEl.classList.add("result-warning");
                 fill.style.background = "var(--warning)";
                 chartColor = "#d29922";
-                badge.textContent  = "Удовлетворительно";
-                badge.className    = "grade-badge badge-warning";
+                badge.textContent = "Удовлетворительно";
+                badge.className   = "grade-badge badge-warning";
             } else if (pct < 85) {
                 finalEl.classList.add("result-good");
                 fill.style.background = "var(--success)";
                 chartColor = "#2ea043";
-                badge.textContent  = "Хорошо";
-                badge.className    = "grade-badge badge-good";
+                badge.textContent = "Хорошо";
+                badge.className   = "grade-badge badge-good";
             } else {
                 finalEl.classList.add("result-excellent");
                 fill.style.background = "#166534";
                 chartColor = "#166534";
-                badge.textContent  = "Отлично 🎉";
-                badge.className    = "grade-badge badge-excellent";
+                badge.textContent = "Отлично 🎉";
+                badge.className   = "grade-badge badge-excellent";
             }
 
-            if (so.length >= 2 && trendChart) updateTrend();
+            if (so.length >= 2) updateTrend();
         } else {
-            finalEl.innerText  = "—";
-            fill.style.width   = "0%";
-            badge.textContent  = "Нет данных";
-            badge.className    = "grade-badge badge-empty";
+            finalEl.innerText = "—";
+            fill.style.width  = "0%";
+            badge.textContent = "Нет данных";
+            badge.className   = "grade-badge badge-empty";
         }
 
         saveState();
@@ -401,16 +486,13 @@ function toggleTrendVisibility(show) {
     }
 }
 
-async function updateTrend() {
+function updateTrend() {
     if (so.length < 2) { toggleTrendVisibility(false); return; }
     toggleTrendVisibility(true);
+
     try {
-        const response = await fetch("/trend", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ scores: so }),
-        });
-        const data = await response.json();
+        // ML считается локально — без сервера
+        const data = linearRegression(so);
         drawTrend(data.scores, data.predictions, data.accuracy);
         if (trendChart?.resize) trendChart.resize();
     } catch (e) {
