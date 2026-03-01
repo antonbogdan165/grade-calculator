@@ -489,3 +489,96 @@
     border-color: rgba(22,163,74,0.2);
 }
 [data-theme="light"] .mobile-cta__title { color: #0f172a; }
+
+/* Перезаписываем блок весов — делаем единую горизонтальную строку */
+.article__weights {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    padding: 14px 16px;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 12px;
+    margin: 20px 0;
+}
+
+.article__weight-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex: 1;
+    min-width: 0;
+    padding: 0 12px;
+    border-right: 1px solid rgba(255,255,255,0.06);
+}
+
+.article__weight-item:first-child {
+    padding-left: 0;
+}
+
+.article__weight-item:last-child {
+    border-right: none;
+}
+
+.article__weight-label {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--muted);
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    flex-shrink: 0;
+    min-width: 28px;
+}
+
+.article__weight-bar {
+    flex: 1;
+    height: 6px;
+    background: rgba(255,255,255,0.08);
+    border-radius: 99px;
+    overflow: hidden;
+    min-width: 30px;
+}
+
+.article__weight-fill {
+    height: 100%;
+    border-radius: 99px;
+    transition: width 0.6s cubic-bezier(.2,.9,.25,1);
+}
+
+.article__weight-pct {
+    font-size: 13px;
+    font-weight: 700;
+    color: #e6edf3;
+    flex-shrink: 0;
+    min-width: 34px;
+    text-align: right;
+}
+
+/* Светлая тема */
+[data-theme="light"] .article__weights {
+    background: #f8fafc;
+    border-color: rgba(0,0,0,0.07);
+}
+
+[data-theme="light"] .article__weight-item {
+    border-right-color: rgba(0,0,0,0.06);
+}
+
+[data-theme="light"] .article__weight-label { color: #64748b; }
+[data-theme="light"] .article__weight-bar   { background: rgba(0,0,0,0.07); }
+[data-theme="light"] .article__weight-pct   { color: #0f172a; }
+
+/* Мобиле — компактнее */
+@media (max-width: 600px) {
+    .article__weights {
+        padding: 10px 12px;
+        gap: 0;
+    }
+    .article__weight-item {
+        padding: 0 8px;
+        gap: 6px;
+    }
+    .article__weight-label { font-size: 10px; min-width: 24px; }
+    .article__weight-pct   { font-size: 12px; min-width: 28px; }
+    .article__weight-bar   { min-width: 20px; }
+}

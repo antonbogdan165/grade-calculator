@@ -9,6 +9,7 @@
 
     <script src="/static/js/theme.js"></script>
     <script src="/static/js/page-loader.js"></script>
+    <link rel="stylesheet" href="/static/css/pwa-banner.css?v=1.4.1">
 
     <title>{% block meta_title %}BilimCalc — калькулятор СО, СОР и СОЧ онлайн{% endblock %}</title>
     <meta name="description" content="{% block meta_desc %}Онлайн калькулятор СО, СОР и СОЧ для школ Казахстана. Быстрый расчёт итоговой оценки за четверть. Бесплатно и без регистрации.{% endblock %}">
@@ -34,8 +35,8 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 
-    <link rel="stylesheet" href="/static/css/style.css?v=1.4.0">
-    <link rel="stylesheet" href="/static/css/article.css?v=1.2.0">
+    <link rel="stylesheet" href="/static/css/style.css?v=1.4.1">
+    <link rel="stylesheet" href="/static/css/article.css?v=1.2.1">
     <link rel="stylesheet" href="/static/css/page-loader.css?v=1.1.0">
     {% block extra_css %}{% endblock %}
 
@@ -186,5 +187,6 @@
     });
 })();
 </script>
+<script src="/static/js/pwa-install.js?v=1.4.1"></script>
 </body>
 </html>

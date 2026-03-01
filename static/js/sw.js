@@ -1,4 +1,4 @@
-const CACHE_NAME = "bilimcalc-v1.4.0d"; // Версия кэша, обновлять при изменении логики кэширования
+const CACHE_NAME = "bilimcalc-v1.4.1"; // Версия кэша, обновлять при изменении логики кэширования
 
 const STATIC_ASSETS = [
     "/",
