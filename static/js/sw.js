@@ -26,7 +26,6 @@ const STATIC_ASSETS = [
     "/static/icons/apple-touch-icon.png",
 ];
 
-// Chart.js с CDN — кэшируем отдельно при первом запросе
 const CDN_PATTERN = /cdn\.jsdelivr\.net/;
 
 /* ── Install: кэшируем всё статичное ── */
@@ -62,11 +61,10 @@ self.addEventListener("activate", event => {
 self.addEventListener("fetch", event => {
     const url = new URL(event.request.url);
 
-    // 1. API /calculate — Network-first, офлайн-заглушка с кэшированным результатом
+    // 1. API /calculate — Network-first, офлайн-заглушка
     if (url.pathname === "/calculate") {
         event.respondWith(
             fetch(event.request.clone()).then(response => {
-                // Сохраняем последний успешный ответ
                 if (response.ok) {
                     const clone = response.clone();
                     caches.open(CACHE_NAME).then(cache =>
@@ -75,17 +73,12 @@ self.addEventListener("fetch", event => {
                 }
                 return response;
             }).catch(async () => {
-                // Офлайн: пробуем вернуть последний кэшированный ответ
                 const cached = await caches.match("/calculate-last");
                 if (cached) return cached;
-                // Иначе — пустой результат
                 return new Response(
                     JSON.stringify({
-                        total_so: null,
-                        total_sor: null,
-                        total_soch: null,
-                        final_result: null,
-                        offline: true
+                        total_so: null, total_sor: null,
+                        total_soch: null, final_result: null, offline: true
                     }),
                     { headers: { "Content-Type": "application/json" } }
                 );
@@ -94,7 +87,7 @@ self.addEventListener("fetch", event => {
         return;
     }
 
-    // 2. API /trend — Network-first, офлайн пропускаем
+    // 2. API /trend — офлайн пропускаем
     if (url.pathname === "/trend") {
         event.respondWith(
             fetch(event.request).catch(() =>
@@ -107,7 +100,7 @@ self.addEventListener("fetch", event => {
         return;
     }
 
-    // 3. CDN (Chart.js) — Cache-first, потом сеть
+    // 3. CDN (Chart.js) — Cache-first
     if (CDN_PATTERN.test(url.hostname)) {
         event.respondWith(
             caches.match(event.request).then(cached => {
@@ -126,24 +119,26 @@ self.addEventListener("fetch", event => {
         return;
     }
 
-    // 4. Всё остальное (страницы, статика) — Cache-first, потом сеть
+    // 4. Статика и страницы — Cache-first с ignoreSearch
+    // ignoreSearch: true позволяет найти /static/css/style.css
+    // даже если в запросе есть ?v=1.4.1
     if (event.request.method !== "GET") return;
 
     event.respondWith(
-        caches.match(event.request).then(cached => {
+        caches.match(event.request, { ignoreSearch: true }).then(cached => {
             if (cached) return cached;
 
             return fetch(event.request).then(response => {
-                // Кэшируем только успешные GET-запросы с нашего домена
                 if (response.ok && url.origin === self.location.origin) {
                     const clone = response.clone();
+                    // Сохраняем по пути БЕЗ query string — чтобы ignoreSearch работал
+                    const cacheKey = new Request(url.pathname);
                     caches.open(CACHE_NAME).then(cache =>
-                        cache.put(event.request, clone)
+                        cache.put(cacheKey, clone)
                     );
                 }
                 return response;
             }).catch(() => {
-                // Офлайн и нет в кэше — отдаём главную страницу (она точно есть)
                 return caches.match("/") || new Response("Offline", { status: 503 });
             });
         })
